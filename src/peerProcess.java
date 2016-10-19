@@ -119,9 +119,9 @@ public class peerProcess {
                         }
                         //receive the message sent from the client
                         message = (String) in.readObject();
-                        Utilities.isValidHandshake(message, peers);
                         //show the message to the user
                         System.out.println("Receive message: " + message + " from client ");
+                        System.out.println("Was this a valid handshake?\t" + Utilities.isValidHandshake(message, peers));
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");
