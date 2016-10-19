@@ -5,4 +5,5 @@ package Messages;
  */
 public class BitfieldMessage extends Message{
     private int value = 5;
+
 }

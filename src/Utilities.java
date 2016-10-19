@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-public class PeerUtilities {
+public class Utilities {
     public static List<Peer> readCfg(String fileName){
         List<Peer> peers = new ArrayList<>();
         List<String> lines = new ArrayList<>();
@@ -31,4 +31,7 @@ public class PeerUtilities {
         return peers;
     }
 
+    public static int getRandomNumberFrom(int start, int end){
+        return (int) Math.random()*end + start;
+    }
 }
