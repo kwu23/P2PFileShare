@@ -9,7 +9,6 @@ public class Server {
 
     private static final int sPort = 8000;   //The server will be listening on this port number
 
-    private List<String> 
 
     public static void main(String[] args) throws Exception {
         System.out.println("The server is running.");
