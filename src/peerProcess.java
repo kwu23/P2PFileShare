@@ -107,26 +107,21 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
-                Boolean hasSent = false;
-                Boolean stayConnected = true;
+                Message messageToSendServer = new HandshakeMessage(peerID);
+                sendMessage(messageToSendServer.getMessage());
+                System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
+                Boolean connect = true;
+                if(!Utilities.isValidHandshake(message, peers)){
+                    connect = false;
+                    sendMessage("Disconnecting due to invalid handshake");
+                    System.out.println("Disconnect with Client due to invalid handshake");
+                }
                 try {
-                    while (stayConnected) {
-                        if(!hasSent){
-                            Message messageToSendServer = new HandshakeMessage(peerID);
-                            sendMessage(messageToSendServer.getMessage());
-
-                            System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
-                            hasSent = true;
-                        }
+                    while (connect) {
                         //receive the message sent from the client
                         message = (String) in.readObject();
                         //show the message to the user
                         System.out.println("Receive message: " + message + " from client ");
-                        if(!Utilities.isValidHandshake(message, peers)){
-                            stayConnected = false;
-                            sendMessage("Disconnecting due to invalid handshake");
-                            System.out.println("Disconnect with Client due to invalid handshake");
-                        }
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");
