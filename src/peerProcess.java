@@ -124,6 +124,7 @@ public class peerProcess {
                         System.out.println("Receive message: " + message + " from client ");
                         if(!Utilities.isValidHandshake(message, peers)){
                             stayConnected = false;
+                            sendMessage("Disconnecting due to invalid handshake");
                             System.out.println("Disconnect with Client due to invalid handshake");
                         }
                     }
