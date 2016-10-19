@@ -111,6 +111,9 @@ public class peerProcess {
                 sendMessage(messageToSendServer.getMessage());
                 System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
                 Boolean connect = true;
+                message = (String) in.readObject();
+                //show the message to the user
+                System.out.println("Receive message: " + message + " from client ");
                 if(!Utilities.isValidHandshake(message, peers)){
                     connect = false;
                     sendMessage("Disconnecting due to invalid handshake");
@@ -128,6 +131,8 @@ public class peerProcess {
                 }
             } catch (IOException ioException) {
                 System.out.println("Disconnect with Client ");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             } finally {
                 //Close connections
                 try {
