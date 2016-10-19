@@ -12,7 +12,7 @@ public class peerProcess {
     ObjectOutputStream out;
     ObjectInputStream in;
     String messageToSendServer;
-    String messageFromServer;
+    PeerInfoCfg messageFromServer;
 
     public static void main() throws IOException {
         peerProcess client = new peerProcess();
@@ -32,7 +32,7 @@ public class peerProcess {
             {
                 messageToSendServer = commonCfg.getFileName();
                 sendMessage(commonCfg);
-                PeerInfoCfg messageFromServer = (PeerInfoCfg) in.readObject();
+                messageFromServer = (PeerInfoCfg) in.readObject();
                 System.out.println("Receive message: " + messageFromServer.toString());
             }
         }
