@@ -36,12 +36,12 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                new Handler(tempSocket).start();
+                new Handler(tempSocket, peers).start();
             }
             Boolean hasSent = false;
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
-                new Handler(listener.accept()).start();
+                new Handler(listener.accept(), peers).start();
                 /*
                 Socket tempSocket = listener.accept();
                 if(tempSocket != null){
@@ -94,9 +94,11 @@ public class peerProcess {
         private Socket connection;
         private ObjectInputStream in;    //stream read from the socket
         private ObjectOutputStream out;    //stream write to the socket
+        private List<Peer> peers;
 
-        public Handler(Socket connection) {
+        public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
+            this.peers = peers;
         }
 
         public void run() {
@@ -117,6 +119,7 @@ public class peerProcess {
                         }
                         //receive the message sent from the client
                         message = (String) in.readObject();
+                        Utilities.isValidHandshake(message, peers);
                         //show the message to the user
                         System.out.println("Receive message: " + message + " from client ");
                     }

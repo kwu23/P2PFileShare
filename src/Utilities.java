@@ -31,6 +31,18 @@ public class Utilities {
         return peers;
     }
 
+    public static Boolean isValidHandshake(String message, List<Peer> peers){
+        int peerID = Integer.parseInt(message.substring(28));
+        if(message.substring(0, 18).equals("P2PFILESHARINGPROJ") && message.substring(18, 28).equals("0000000000")) {
+            for(Peer peer : peers){
+                if(peerID == peer.getPeerID()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static int getRandomNumberFrom(int start, int end){
         return (int) Math.random()*end + start;
     }
