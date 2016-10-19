@@ -108,8 +108,9 @@ public class peerProcess {
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
                 Boolean hasSent = false;
+                Boolean stayConnected = true;
                 try {
-                    while (true) {
+                    while (stayConnected) {
                         if(!hasSent){
                             Message messageToSendServer = new HandshakeMessage(peerID);
                             sendMessage(messageToSendServer.getMessage());
@@ -121,7 +122,10 @@ public class peerProcess {
                         message = (String) in.readObject();
                         //show the message to the user
                         System.out.println("Receive message: " + message + " from client ");
-                        System.out.println("Was this a valid handshake?\t" + Utilities.isValidHandshake(message, peers));
+                        if(!Utilities.isValidHandshake(message, peers)){
+                            stayConnected = false;
+                            System.out.println("Disconnect with Client due to invalid handshake");
+                        }
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");
