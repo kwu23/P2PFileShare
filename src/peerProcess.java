@@ -90,7 +90,7 @@ public class peerProcess {
         }
     }
     private static class Handler extends Thread {
-        private Message message;    //message received from the client
+        private String message;    //message received from the client
         private Socket connection;
         private ObjectInputStream in;    //stream read from the socket
         private ObjectOutputStream out;    //stream write to the socket
@@ -109,17 +109,16 @@ public class peerProcess {
                 try {
                     while (true) {
                         if(!hasSent){
-                            HandshakeMessage messageToSendServer = new HandshakeMessage(peerID);
-                            sendMessage("hi from "+peerID);//messageToSendServer);
+                            Message messageToSendServer = new HandshakeMessage(peerID);
+                            sendMessage(messageToSendServer.getMessage());
 
                             System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
                             hasSent = true;
                         }
                         //receive the message sent from the client
-                        //message = (Message) in.readObject();
+                        message = (String) in.readObject();
                         //show the message to the user
-			String test = (String) in.readObject();
-                        System.out.println("Receive message: " + test + " from client ");
+                        System.out.println("Receive message: " + message + " from client ");
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");
