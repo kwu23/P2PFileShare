@@ -1,3 +1,5 @@
+import Messages.HandshakeMessage;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,8 +34,9 @@ public class Utilities {
     }
 
     public static Boolean isValidHandshake(String message, List<Peer> peers){
-        int peerID = Integer.parseInt(message.substring(28));
-        if(message.substring(0, 18).equals("P2PFILESHARINGPROJ") && message.substring(18, 28).equals("0000000000")) {
+        HandshakeMessage handshakeMessage = new HandshakeMessage(message);
+        int peerID = handshakeMessage.getPeerID();
+        if(handshakeMessage.getHEADER().equals("P2PFILESHARINGPROJ") && handshakeMessage.getZEROES().equals("0000000000")) {
             for(Peer peer : peers){
                 if(peerID == peer.getPeerID()){
                     return true;

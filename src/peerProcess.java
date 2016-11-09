@@ -42,34 +42,11 @@ public class peerProcess {
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
                 new Handler(listener.accept(), peers).start();
-                /*
-                Socket tempSocket = listener.accept();
-                if(tempSocket != null){
-                    connections.add(new Connection(tempSocket, new ObjectOutputStream(tempSocket.getOutputStream()), new ObjectInputStream(tempSocket.getInputStream())));
-                }
-
-                if(!hasSent && !connections.isEmpty()){
-                    String messageToSendServer = "Hey from " + peerID;
-                    for(Connection connection : connections){
-                        sendMessage(connection, messageToSendServer);
-                    }
-
-                    System.out.println("Message \"" + messageToSendServer + "\" sent");
-                    hasSent = true;
-                }
-                for(Connection connection : connections){
-                    String messageFromServer = (String) connection.getIn().readObject();
-                    System.out.println("Receive message: " + messageFromServer);
-                }
-                */
             }
         }
         catch (ConnectException e) {
             System.err.println("Connection refused. You need to initiate a server first.");
         }
-        /*catch ( ClassNotFoundException e ) {
-            System.err.println("Class not found");
-        }*/
         catch(UnknownHostException unknownHost){
             System.err.println("You are trying to connect to an unknown host!");
         }
@@ -90,7 +67,7 @@ public class peerProcess {
         }
     }
     private static class Handler extends Thread {
-        private String message;    //message received from the client
+        private Message message;    //message received from the client
         private Socket connection;
         private ObjectInputStream in;    //stream read from the socket
         private ObjectOutputStream out;    //stream write to the socket
@@ -108,13 +85,25 @@ public class peerProcess {
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
                 Message messageToSendServer = new HandshakeMessage(peerID);
-                sendMessage(messageToSendServer.getMessage());
+                sendMessage(messageToSendServer);
                 System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
                 Boolean connect = true;
-                message = (String) in.readObject();
+                message = (Message) in.readObject();
+                /*
+                switch(Integer.parseInt(message.substring(4,4))){
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                }
+                */
                 //show the message to the user
-                System.out.println("Receive message: " + message + " from client ");
-                if(!Utilities.isValidHandshake(message, peers)){
+                System.out.println("Receive message: " + message.getMessage() + " from client ");
+                if(!Utilities.isValidHandshake(message.getMessage(), peers)){
                     connect = false;
                     sendMessage("Disconnecting due to invalid handshake");
                     System.out.println("Disconnect with Client due to invalid handshake");
@@ -122,9 +111,9 @@ public class peerProcess {
                 try {
                     while (connect) {
                         //receive the message sent from the client
-                        message = (String) in.readObject();
+                        message = (Message) in.readObject();
                         //show the message to the user
-                        System.out.println("Receive message: " + message + " from client ");
+                        System.out.println("Receive message: " + message.getMessage() + " from client ");
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");
