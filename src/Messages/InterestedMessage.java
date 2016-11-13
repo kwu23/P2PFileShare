@@ -18,13 +18,7 @@ public class InterestedMessage extends Message {
         return value;
     }
 
-    @Override
     public String getPayload() {
-        return null;
-    }
-
-    @Override
-    public String getMessage() {
         return null;
     }
 }
