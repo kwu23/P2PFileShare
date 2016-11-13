@@ -22,7 +22,7 @@ public class BitfieldMessage extends Message{
         return 0;
     }
 
-    public String getPayload() {
-        return null;
+    public boolean[] getPayload() {
+        return payload;
     }
 }

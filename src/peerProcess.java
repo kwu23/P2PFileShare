@@ -1,3 +1,4 @@
+import Messages.BitfieldMessage;
 import Messages.HandshakeMessage;
 import Messages.Message;
 
@@ -18,6 +19,7 @@ public class peerProcess {
     static int peerID;
     List<Connection> connections;
     Peer me;
+    static boolean[] ourBitfield;
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
@@ -32,13 +34,13 @@ public class peerProcess {
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
+                    peerProcess.ourBitfield = Utilities.createBitfield(me.hasFile());
                     break;
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
                 new Handler(tempSocket, peers).start();
             }
-            Boolean hasSent = false;
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
                 new Handler(listener.accept(), peers).start();
@@ -67,11 +69,12 @@ public class peerProcess {
         }
     }
     private static class Handler extends Thread {
-        private HandshakeMessage message;    //message received from the client
+        private Message message;    //message received from the client
         private Socket connection;
         private ObjectInputStream in;    //stream read from the socket
         private ObjectOutputStream out;    //stream write to the socket
         private List<Peer> peers;
+        private boolean[] theirBitfield;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
@@ -84,25 +87,40 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
-                HandshakeMessage messageToSendServer = new HandshakeMessage(peerID);
-                sendMessage(messageToSendServer);
-                System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
+                HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
+                sendMessage(handshakeMessage);
+                System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
-                message = (HandshakeMessage) in.readObject();
+                handshakeMessage = (HandshakeMessage) in.readObject();
                 
                 //show the message to the user
-                System.out.println("Receive message: \"" + message.getMessage() + "\" from client ");
-                if(!Utilities.isValidHandshake(message.getMessage(), peers)){
+                System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
+                if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
                     connect = false;
                     sendMessage("Disconnecting due to invalid handshake");
                     System.out.println("Disconnect with Client due to invalid handshake");
                 }
+                if(connect){
+                    sendMessage("Connection successful!");
+                }
+                String handshakeVerification = (String) in.readObject();
+                if(!handshakeVerification.equals("Connection successful!")){
+                    connect = false;
+                }
+                if(connect){
+                    sendMessage(new BitfieldMessage(peerProcess.ourBitfield));
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
+                    theirBitfield = bitfieldMessage.getPayload();
+                    for(int x=0; x<theirBitfield.length; x++){
+                        System.out.print("THEIR BITFIELD: " + theirBitfield[x]);
+                    }
+                }
                 try {
                     while (connect) {
                         //receive the message sent from the client
-                        message = (HandshakeMessage) in.readObject();
+                        message = (Message) in.readObject();
                         //show the message to the user
-                        System.out.println("Receive message: \"" + message.getMessage() + "\" from client ");
+                        System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");

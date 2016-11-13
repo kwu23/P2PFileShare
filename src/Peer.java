@@ -22,7 +22,7 @@ public class Peer {
     public int getListeningPort(){
         return listeningPort;
     }
-    public boolean isHasFile(){
+    public boolean hasFile(){
         return hasFile;
     }
 }

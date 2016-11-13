@@ -70,8 +70,12 @@ public class Utilities {
         }
     }
 
-    public static boolean[] createBitfield(){
-        return new boolean[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())];
+    public static boolean[] createBitfield(boolean hasFile){
+        boolean[] bitfield = new boolean[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())];
+        for(int x=0; x<bitfield.length; x++){
+            bitfield[x] = hasFile;
+        }
+        return bitfield;
     }
 
     public static int getBitfieldSize(int fileSize, int pieceSize){
