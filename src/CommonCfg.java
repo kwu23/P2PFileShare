@@ -20,23 +20,23 @@ public class CommonCfg {
             lines = Files.readAllLines(Paths.get(fileName));
             boolean temp = false;
             for (String s : lines) {
-                if (s.contains("NumberOfPreferredNeighbors")) {
+                if (s.startsWith("NumberOfPreferredNeighbors")) {
                     String[] tempS = s.split(" +");
                     this.numberOfPreferredNeighbors = Integer.parseInt(tempS[1]);
-                } else if (s.contains("UnchokingInterval")) {
+                } else if (s.startsWith("UnchokingInterval")) {
                     temp = true;
                     String[] tempS = s.split(" +");
                     this.unchokingInterval = Integer.parseInt(tempS[1]);
-                } else if (s.contains("OptimisticUnchokingInterval")) {
+                } else if (s.startsWith("OptimisticUnchokingInterval")) {
                     String[] tempS = s.split(" +");
                     this.optimisticUnchokingInterval = Integer.parseInt(tempS[1]);
-                } else if (s.contains("FileName")) {
+                } else if (s.startsWith("FileName")) {
                     String[] splitStr = s.split(" ");
                     this.fileName = splitStr[1];
-                } else if (s.contains("FileSize")) {
+                } else if (s.startsWith("FileSize")) {
                     String[] tempS = s.split(" +");
                     this.fileSize = Integer.parseInt(tempS[1]);
-                } else if (s.contains("PieceSize")) {
+                } else if (s.startsWith("PieceSize")) {
                     String[] tempS = s.split(" +");
                     this.pieceSize = Integer.parseInt(tempS[1]);
                 }
