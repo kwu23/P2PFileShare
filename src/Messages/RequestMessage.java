@@ -15,18 +15,17 @@ public class RequestMessage extends Message{
 	@Override
 	public int getLength() {
 		// TODO Auto-generated method stub
-		return 0;
+		return length;
 	}
 
 	@Override
 	public int getValue() {
 		// TODO Auto-generated method stub
-		return 0;
+		return value;
 	}
 	
-	public String getPayload() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getPayload() {
+		return payload;
 	}
 
 }

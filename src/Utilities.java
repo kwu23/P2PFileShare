@@ -54,7 +54,10 @@ public class Utilities {
         return false;
     }
 
-    public static byte[][] getBytesOfFile(String path) throws IOException{
+    public static byte[][] getBytesOfFile(String path, boolean hasFile) throws IOException{
+        if(!hasFile){
+            return new byte[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())][CommonCfg.getPieceSize()];
+        }
         byte[] fileData = Files.readAllBytes(Paths.get(path));
         byte[][] pieces = new byte[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())][CommonCfg.getPieceSize()];
         int counter = 0;

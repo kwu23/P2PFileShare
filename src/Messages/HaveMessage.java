@@ -3,7 +3,7 @@ package Messages;
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class HaveMessage {
+public class HaveMessage extends Message {
     private int value = 4;
     private int length = 5;
     private int payload;
