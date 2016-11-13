@@ -92,8 +92,6 @@ public class peerProcess {
         public void run() {
             try {
                 //initialize Input and Output streams
-                out = new ObjectOutputStream(connection.getOutputStream());
-                out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(connection, handshakeMessage);
@@ -240,18 +238,6 @@ public class peerProcess {
             }
         }
     }
-
-    void sendMessage(Connection connection, Object msg)
-    {
-        try{
-            connection.getOut().writeObject(msg);
-            connection.getOut().flush();
-        }
-        catch(IOException ioException){
-            ioException.printStackTrace();
-        }
-    }
-
 
 
     class Neighbor{
