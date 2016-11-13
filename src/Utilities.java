@@ -61,10 +61,13 @@ public class Utilities {
         byte[] fileData = Files.readAllBytes(Paths.get(path));
         byte[][] pieces = new byte[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())][CommonCfg.getPieceSize()];
         int counter = 0;
-        for(int x=0; x<fileData.length; x++){
-            for(int y=0; y<pieces.length; y++){
+        for(int x=0; x<pieces.length; x++){
+            for(int y=0; y<CommonCfg.getPieceSize(); y++){
                 pieces[x][y] = fileData[counter];
                 counter++;
+                if(counter>=fileData.length){
+                    break;
+                }
             }
         }
         return pieces;
