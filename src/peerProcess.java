@@ -139,13 +139,13 @@ public class peerProcess {
                         sendMessage(out, new ChokeMessage());
                         message = (Message) in.readObject();
                         switch(message.getValue()){
-                            case 0: handleChokeMessage();
-                            case 1: sendMessage(out, handleUnchokeMessage());
-                            case 2: handleInterestedMessage();
-                            case 3: handleNotInterestedMessage();
-                            case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload());
-                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload()));
-                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message));
+                            case 0: handleChokeMessage(); break;
+                            case 1: sendMessage(out, handleUnchokeMessage()); break;
+                            case 2: handleInterestedMessage(); break;
+                            case 3: handleNotInterestedMessage(); break;
+                            case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
+                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
+                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
                             default: break;
                         }
 
@@ -194,7 +194,11 @@ public class peerProcess {
                     ones.add(x);
                 }
             }
-            return ones.get(new Random().nextInt(ones.size()));
+            int num = ((int)((Math.random())*ones.size())-1);
+            if(num < 0 || num >= ones.size()){
+                return 0;
+            }
+            return ones.get(num);
         }
 
         public void handleChokeMessage(){
