@@ -153,7 +153,7 @@ public class peerProcess {
                         //show the message to the user
                         System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
                     }
-                } catch (ClassNotFoundException classnot) {
+                } catch (Exception classnot) {
                     System.err.println("Data received in unknown format");
                 }
             } catch (IOException ioException) {
