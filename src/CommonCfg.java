@@ -24,11 +24,11 @@ public class CommonCfg {
                     CommonCfg.numberOfPreferredNeighbors = Integer.parseInt(tempS[1]);
                 } else if (s.contains("UnchokingInterval")) {
                     String[] tempS = s.split(" +");
-                    System.out.print(tempS[1]);
+                    System.out.print(Integer.parseInt(tempS[1]));
                     CommonCfg.unchokingInterval = Integer.parseInt(tempS[1]);
                 } else if (s.contains("OptimisticUnchokingInterval")) {
                     String[] tempS = s.split(" +");
-                    System.out.print(tempS[1]);
+                    System.out.print(Integer.parseInt(tempS[1]));
                     CommonCfg.optimisticUnchokingInterval = Integer.parseInt(tempS[1]);
                 } else if (s.contains("FileName")) {
                     String[] splitStr = s.split(" ");
