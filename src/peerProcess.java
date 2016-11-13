@@ -34,7 +34,7 @@ public class peerProcess {
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
-                    System.out.println("DO I HAVE FILE? " + me.hasFile());
+                    System.out.println("DO I HAVE FILE? " + peer.hasFile());
                     peerProcess.ourBitfield = Utilities.createBitfield(me.hasFile());
                     break;
                 }

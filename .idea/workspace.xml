@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d44fb2e0-ba3a-4a43-8ab7-2d94f697c532" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Utilities.java" afterPath="$PROJECT_DIR$/src/Utilities.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peerProcess.java" afterPath="$PROJECT_DIR$/src/peerProcess.java" />
     </list>
     <ignored path="P2PFileShare.iws" />
@@ -27,8 +28,8 @@
       <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="36" column="74" selection-start-line="36" selection-start-column="74" selection-end-line="36" selection-end-column="74" />
+            <state relative-caret-position="281">
+              <caret line="41" column="69" selection-start-line="41" selection-start-column="69" selection-end-line="41" selection-end-column="69" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -51,11 +52,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="PeerUtilities.class" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/PeerUtilities.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-30">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Utilities.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Utilities.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -129,10 +140,10 @@
         <option value="$PROJECT_DIR$/src/PeerInfo.cfg" />
         <option value="$PROJECT_DIR$/src/Messages/HandshakeMessage.java" />
         <option value="$PROJECT_DIR$/src/CommonCfg.java" />
-        <option value="$PROJECT_DIR$/src/Utilities.java" />
         <option value="$PROJECT_DIR$/src/Peer.java" />
         <option value="$PROJECT_DIR$/src/Messages/BitfieldMessage.java" />
         <option value="$PROJECT_DIR$/src/peerProcess.java" />
+        <option value="$PROJECT_DIR$/src/Utilities.java" />
       </list>
     </option>
   </component>
@@ -729,12 +740,12 @@
       <workItem from="1478470513536" duration="268000" />
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
-      <workItem from="1479053673291" duration="5247000" />
+      <workItem from="1479053673291" duration="5474000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28496000" />
+    <option name="totallyTimeSpent" value="28723000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="952" extended-state="6" />
@@ -1079,13 +1090,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/PeerUtilities.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/PeerInfo.cfg">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -1200,16 +1204,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Utilities.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Peer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1223,10 +1217,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/PeerUtilities.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-30">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Utilities.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="36" column="74" selection-start-line="36" selection-start-column="74" selection-end-line="36" selection-end-column="74" />
+        <state relative-caret-position="281">
+          <caret line="41" column="69" selection-start-line="41" selection-start-column="69" selection-end-line="41" selection-end-column="69" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

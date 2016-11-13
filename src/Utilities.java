@@ -28,7 +28,7 @@ public class Utilities {
                 peerData.trim();
                 if(!peerData.isEmpty()){
                     String[] data = peerData.split(" ");
-                    peers.add(new Peer(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), Boolean.parseBoolean(data[3])));
+                    peers.add(new Peer(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), (boolean) Integer.parseInt(data[3])));
                 }
             }
         }
