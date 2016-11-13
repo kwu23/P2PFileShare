@@ -5,22 +5,24 @@ package Messages;
  */
 public class BitfieldMessage extends Message{
     private int value = 5;
+    private int length;
+    private boolean[] payload;
 
-	@Override
-	public int getLength() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public BitfieldMessage(boolean[] bitfield) {
+    	this.payload = bitfield;
+    	this.length = bitfield.length + 1;
+    }
+    @Override
+    public int getLength() {
+        return 0;
+    }
 
-	@Override
-	public int getValue() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getValue() {
+        return 0;
+    }
 
-	public String getPayload() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+    public String getPayload() {
+        return null;
+    }
 }

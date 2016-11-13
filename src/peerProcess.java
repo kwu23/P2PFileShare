@@ -13,20 +13,20 @@ import java.util.List;
  * Created by kevinwu on 10/19/16.
  */
 public class peerProcess {
-    CommonCfg commonCfg;
+    static CommonCfg commonCfg;
     List<Peer> peers;
     static int peerID;
     List<Connection> connections;
     Peer me;
 
     public static void main(String[] args) throws IOException {
+        commonCfg = new CommonCfg("Common.cfg");
         peerID = Integer.parseInt(args[0]);
         peerProcess client = new peerProcess();
         client.run();
     }
     void run() throws IOException {
         try{
-            //commonCfg = new CommonCfg("Common.cfg");
             peers = Utilities.readCfg("PeerInfo.cfg");
             connections = new ArrayList<>();
             for(Peer peer : peers){
@@ -67,7 +67,7 @@ public class peerProcess {
         }
     }
     private static class Handler extends Thread {
-        private Message message;    //message received from the client
+        private HandshakeMessage message;    //message received from the client
         private Socket connection;
         private ObjectInputStream in;    //stream read from the socket
         private ObjectOutputStream out;    //stream write to the socket
@@ -84,25 +84,14 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
-                Message messageToSendServer = new HandshakeMessage(peerID);
+                HandshakeMessage messageToSendServer = new HandshakeMessage(peerID);
                 sendMessage(messageToSendServer);
                 System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
                 Boolean connect = true;
-                message = (Message) in.readObject();
-                /*
-                switch(Integer.parseInt(message.substring(4,4))){
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                }
-                */
+                message = (HandshakeMessage) in.readObject();
+                
                 //show the message to the user
-                System.out.println("Receive message: " + message.getMessage() + " from client ");
+                System.out.println("Receive message: \"" + message.getMessage() + "\" from client ");
                 if(!Utilities.isValidHandshake(message.getMessage(), peers)){
                     connect = false;
                     sendMessage("Disconnecting due to invalid handshake");
@@ -111,9 +100,9 @@ public class peerProcess {
                 try {
                     while (connect) {
                         //receive the message sent from the client
-                        message = (Message) in.readObject();
+                        message = (HandshakeMessage) in.readObject();
                         //show the message to the user
-                        System.out.println("Receive message: " + message.getMessage() + " from client ");
+                        System.out.println("Receive message: \"" + message.getMessage() + "\" from client ");
                     }
                 } catch (ClassNotFoundException classnot) {
                     System.err.println("Data received in unknown format");

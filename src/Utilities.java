@@ -1,5 +1,7 @@
 import Messages.HandshakeMessage;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,6 +46,40 @@ public class Utilities {
             }
         }
         return false;
+    }
+
+    public static byte[][] getBytesOfFile(String path) throws IOException{
+        byte[] fileData = Files.readAllBytes(Paths.get(path));
+        byte[][] pieces = new byte[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())][CommonCfg.getPieceSize()];
+        int counter = 0;
+        for(int x=0; x<fileData.length; x++){
+            for(int y=0; y<pieces.length; y++){
+                pieces[x][y] = fileData[counter];
+                counter++;
+            }
+        }
+        return pieces;
+    }
+
+    public static void turnBytesToFile(byte[] bytes) throws IOException{
+        FileOutputStream stream = new FileOutputStream(CommonCfg.getFileName());
+        try {
+            stream.write(bytes);
+        } finally {
+            stream.close();
+        }
+    }
+
+    public static boolean[] createBitfield(){
+        return new boolean[getBitfieldSize(CommonCfg.getFileSize(), CommonCfg.getPieceSize())];
+    }
+
+    public static int getBitfieldSize(int fileSize, int pieceSize){
+        if(fileSize%pieceSize == 0) {
+            return fileSize / pieceSize;
+        }else {
+            return fileSize / pieceSize +1;
+        }
     }
 
     public static int getRandomNumberFrom(int start, int end){

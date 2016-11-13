@@ -7,35 +7,36 @@ import java.util.List;
  * Created by kevinwu on 10/19/16.
  */
 public class CommonCfg {
-    private int numberOfPreferredNeighbors;
-    private int unchokingInterval;
-    private int optimisticUnchokingInterval;
-    private String fileName;
-    private int fileSize;
-    private int pieceSize;
+    private static int numberOfPreferredNeighbors;
+    private static int unchokingInterval;
+    private static int optimisticUnchokingInterval;
+    private static String fileName;
+    private static int fileSize;
+    private static int pieceSize;
 
     public CommonCfg(String fileName) {
-        readCommonConfig(fileName);
-    }
-
-    public void readCommonConfig(String fileName) {
         List<String> lines;
         try {
-           lines = Files.readAllLines(Paths.get(fileName));
+            lines = Files.readAllLines(Paths.get(fileName));
             for (String s : lines) {
                 if (s.contains("NumberOfPreferredNeighbors")) {
-                    numberOfPreferredNeighbors = Integer.parseInt(s);
+                    String[] tempS = s.split(" +");
+                    CommonCfg.numberOfPreferredNeighbors = Integer.parseInt(tempS[1]);
                 } else if (s.contains("UnchokingInterval")) {
-                    unchokingInterval = Integer.parseInt(s);
+                    String[] tempS = s.split(" +");
+                    CommonCfg.unchokingInterval = Integer.parseInt(tempS[1]);
                 } else if (s.contains("OptimisticUnchokingInterval")) {
-                    optimisticUnchokingInterval = Integer.parseInt(s);
+                    String[] tempS = s.split(" +");
+                    CommonCfg.optimisticUnchokingInterval = Integer.parseInt(tempS[1]);
                 } else if (s.contains("FileName")) {
-                    String[] splitStr = s.split(" ", 2);
-                    fileName = splitStr[1];
-                } else if (s.contains("FileName")) {
-                    fileSize = Integer.parseInt(s);
+                    String[] splitStr = s.split(" ");
+                    CommonCfg.fileName = splitStr[1];
+                } else if (s.contains("FileSize")) {
+                    String[] tempS = s.split(" +");
+                    CommonCfg.fileSize = Integer.parseInt(tempS[1]);
                 } else if (s.contains("PieceSize")) {
-                    pieceSize = Integer.parseInt(s);
+                    String[] tempS = s.split(" +");
+                    CommonCfg.pieceSize = Integer.parseInt(tempS[1]);
                 }
             }
 
@@ -44,27 +45,27 @@ public class CommonCfg {
         }
     }
 
-    public int getNumberOfPreferredNeighbors() {
+    public static int getNumberOfPreferredNeighbors() {
         return numberOfPreferredNeighbors;
     }
 
-    public int getUnchokingInterval() {
+    public static int getUnchokingInterval() {
         return unchokingInterval;
     }
 
-    public int getOptimisticUnchokingInterval() {
+    public static int getOptimisticUnchokingInterval() {
         return optimisticUnchokingInterval;
     }
 
-    public String getFileName() {
+    public static String getFileName() {
         return fileName;
     }
 
-    public int getFileSize() {
+    public static int getFileSize() {
         return fileSize;
     }
 
-    public int getPieceSize() {
+    public static int getPieceSize() {
         return pieceSize;
     }
 

@@ -9,16 +9,12 @@ public class PieceMessage {
     private byte[] payload;
     
     public PieceMessage(byte[] payload){
-    	this.setLength(payload.length);
+    	this.length = payload.length + 1;
     	this.payload = payload;
     }
 
 	public int getLength() {
 		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
 	}
 
 	public byte[] getPayload() {
