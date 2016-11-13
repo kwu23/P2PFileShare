@@ -133,11 +133,11 @@ public class peerProcess {
                     while (connect) {
                         if(System.nanoTime() - startTime >= unchokeInterval){
                             System.out.println("timing worked");
-                            sendMessage(out, new ChokeMessage());
+                            //sendMessage(out, new ChokeMessage());
                             startTime = System.nanoTime();
                         }
                         //sendMessage(out, new ChokeMessage());
-                        message = (Message) in.readObject();
+                        //message = (Message) in.readObject();
                         switch(message.getValue()){
                             case 0: handleChokeMessage(); break;
                             case 1: sendMessage(out, handleUnchokeMessage()); break;
