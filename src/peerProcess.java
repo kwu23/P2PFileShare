@@ -34,6 +34,7 @@ public class peerProcess {
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
+                    System.out.println("DO I HAVE FILE? " + me.hasFile());
                     peerProcess.ourBitfield = Utilities.createBitfield(me.hasFile());
                     break;
                 }
@@ -111,8 +112,9 @@ public class peerProcess {
                     sendMessage(new BitfieldMessage(peerProcess.ourBitfield));
                     BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
+                    System.out.println("THEIR BITFIELD: ");
                     for(int x=0; x<theirBitfield.length; x++){
-                        System.out.print("THEIR BITFIELD: " + theirBitfield[x]);
+                        System.out.print(theirBitfield[x]);
                     }
                 }
                 try {
