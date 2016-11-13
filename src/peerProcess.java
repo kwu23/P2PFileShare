@@ -22,7 +22,7 @@ public class peerProcess {
     static boolean[] ourBitfield;
     static long unchokeInterval;
     static List<Neighbor> amountReceived = new ArrayList<>();
-    static ArrayList<Socket> threads = new ArrayList<>();
+    static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
@@ -92,9 +92,11 @@ public class peerProcess {
         public void run() {
             try {
                 //initialize Input and Output streams
+                out = new ObjectOutputStream(connection.getOutputStream());
+                out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
-                sendMessage(connection, handshakeMessage);
+                sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
                 handshakeMessage = (HandshakeMessage) in.readObject();
@@ -104,11 +106,11 @@ public class peerProcess {
                 System.out.print("TEST1");
                 if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
                     connect = false;
-                    sendMessage(connection, "Disconnecting due to invalid handshake");
+                    sendMessage(out, "Disconnecting due to invalid handshake");
                     System.out.println("Disconnect with Client due to invalid handshake");
                 }
                 if(connect){
-                    sendMessage(connection, "Connection successful!");
+                    sendMessage(out, "Connection successful!");
                 }
                 System.out.print("TEST2");
                 String handshakeVerification = (String) in.readObject();
@@ -116,9 +118,9 @@ public class peerProcess {
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
-                threads.add(connection);
+                threads.add(out);
                 if(connect){
-                    sendMessage(connection, new BitfieldMessage(peerProcess.ourBitfield));
+                    sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
                     BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
                     System.out.println("THEIR BITFIELD: ");
@@ -130,17 +132,17 @@ public class peerProcess {
                     long startTime = System.nanoTime();
                     while (connect) {
                         if(System.nanoTime() - startTime >= unchokeInterval){
-                            sendMessage(connection, new ChokeMessage());
+                            sendMessage(out, new ChokeMessage());
                             startTime = System.nanoTime();
                         }
                         message = (Message) in.readObject();
                         switch(message.getValue()){
                             case 0: handleChokeMessage();
-                            case 1: sendMessage(connection, handleUnchokeMessage());
+                            case 1: sendMessage(out, handleUnchokeMessage());
                             case 2: handleInterestedMessage();
                             case 3: handleNotInterestedMessage();
                             case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload());
-                            case 6: if(!isChoked) sendMessage(connection, handleRequestMessage(((RequestMessage) message).getPayload()));
+                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload()));
                             case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message));
                             default: break;
                         }
@@ -221,19 +223,18 @@ public class peerProcess {
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
             return new HaveMessage(pieceMessage.getIndex());
         }
-        void sendMessage(Socket connection, Object msg)
+        void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
-                ObjectOutputStream tempOut = new ObjectOutputStream(connection.getOutputStream());
-                tempOut.writeObject(msg);
-                tempOut.flush();
+                out.writeObject(msg);
+                out.flush();
             }
             catch(IOException ioException){
                 ioException.printStackTrace();
             }
         }
-        void sendMessageToAll(ArrayList<Socket> connections, Object msg){
-            for(Socket connection : connections){
+        void sendMessageToAll(ArrayList<ObjectOutputStream> connections, Object msg){
+            for(ObjectOutputStream connection : connections){
                 sendMessage(connection, msg);
             }
         }
