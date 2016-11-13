@@ -103,6 +103,7 @@ public class peerProcess {
                 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
+                System.out.print("TEST1");
                 if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
                     connect = false;
                     sendMessage(connection, "Disconnecting due to invalid handshake");
@@ -111,6 +112,7 @@ public class peerProcess {
                 if(connect){
                     sendMessage(connection, "Connection successful!");
                 }
+                System.out.print("TEST2");
                 String handshakeVerification = (String) in.readObject();
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
