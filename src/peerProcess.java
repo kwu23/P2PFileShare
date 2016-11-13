@@ -136,7 +136,7 @@ public class peerProcess {
                             sendMessage(out, new ChokeMessage());
                             startTime = System.nanoTime();
                         }
-                        sendMessage(out, new ChokeMessage());
+                        //sendMessage(out, new ChokeMessage());
                         message = (Message) in.readObject();
                         switch(message.getValue()){
                             case 0: handleChokeMessage(); break;
