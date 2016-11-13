@@ -28,12 +28,18 @@ public class Utilities {
                 peerData.trim();
                 if(!peerData.isEmpty()){
                     String[] data = peerData.split(" ");
-                    peers.add(new Peer(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), (boolean) Integer.parseInt(data[3])));
+                    if(data[3].equals("1")){
+                        peers.add(new Peer(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), true));
+                    }else{
+                        peers.add(new Peer(Integer.parseInt(data[0]), data[1], Integer.parseInt(data[2]), false));
+                    }
                 }
             }
         }
         return peers;
     }
+
+
 
     public static Boolean isValidHandshake(String message, List<Peer> peers){
         HandshakeMessage handshakeMessage = new HandshakeMessage(message);
