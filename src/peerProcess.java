@@ -112,6 +112,7 @@ public class peerProcess {
                     sendMessage(connection, "Connection successful!");
                 }
                 String handshakeVerification = (String) in.readObject();
+                System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
