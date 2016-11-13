@@ -39,7 +39,12 @@ public class CommonCfg {
                     CommonCfg.pieceSize = Integer.parseInt(tempS[1]);
                 }
             }
-
+            System.out.println(numberOfPreferredNeighbors);
+            System.out.println(unchokingInterval);
+            System.out.println(optimisticUnchokingInterval);
+            System.out.println(fileName);
+            System.out.println(fileSize);
+            System.out.println(pieceSize);
         } catch (IOException e) {
             e.printStackTrace();
         }

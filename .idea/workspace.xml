@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d44fb2e0-ba3a-4a43-8ab7-2d94f697c532" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peerProcess.java" afterPath="$PROJECT_DIR$/src/peerProcess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CommonCfg.java" afterPath="$PROJECT_DIR$/src/CommonCfg.java" />
     </list>
     <ignored path="P2PFileShare.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,11 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="135" column="61" selection-start-line="135" selection-start-column="61" selection-end-line="135" selection-end-column="61" />
+            <state relative-caret-position="315">
+              <caret line="145" column="51" selection-start-line="145" selection-start-column="51" selection-end-line="145" selection-end-column="51" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#9317#9318#0" expanded="true" />
@@ -147,15 +147,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommonCfg.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CommonCfg.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CommonCfg.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+            <state relative-caret-position="146">
+              <caret line="46" column="40" selection-start-line="46" selection-start-column="40" selection-end-line="46" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2322#2323#0" expanded="true" />
-                <element signature="e#2354#2355#0" expanded="true" />
+                <element signature="e#2620#2621#0" expanded="true" />
+                <element signature="e#2652#2653#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -200,8 +200,8 @@
         <option value="$PROJECT_DIR$/src/Messages/PieceMessage.java" />
         <option value="$PROJECT_DIR$/src/Messages/RequestMessage.java" />
         <option value="$PROJECT_DIR$/src/Utilities.java" />
-        <option value="$PROJECT_DIR$/src/CommonCfg.java" />
         <option value="$PROJECT_DIR$/src/peerProcess.java" />
+        <option value="$PROJECT_DIR$/src/CommonCfg.java" />
       </list>
     </option>
   </component>
@@ -798,12 +798,12 @@
       <workItem from="1478470513536" duration="268000" />
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
-      <workItem from="1479053673291" duration="12519000" />
+      <workItem from="1479053673291" duration="12681000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35768000" />
+    <option name="totallyTimeSpent" value="35930000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="952" extended-state="6" />
@@ -1055,8 +1055,8 @@
           <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2322#2323#0" expanded="true" />
-            <element signature="e#2354#2355#0" expanded="true" />
+            <element signature="e#2620#2621#0" expanded="true" />
+            <element signature="e#2652#2653#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1292,18 +1292,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CommonCfg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2322#2323#0" expanded="true" />
-            <element signature="e#2354#2355#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Messages/PieceMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1323,8 +1311,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="135" column="61" selection-start-line="135" selection-start-column="61" selection-end-line="135" selection-end-column="61" />
+        <state relative-caret-position="315">
+          <caret line="145" column="51" selection-start-line="145" selection-start-column="51" selection-end-line="145" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#9317#9318#0" expanded="true" />
@@ -1341,6 +1329,18 @@
             <element signature="e#10904#10905#0" expanded="true" />
             <element signature="e#10936#10937#0" expanded="true" />
             <element signature="e#10973#10974#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CommonCfg.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="46" column="40" selection-start-line="46" selection-start-column="40" selection-end-line="46" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2620#2621#0" expanded="true" />
+            <element signature="e#2652#2653#0" expanded="true" />
           </folding>
         </state>
       </provider>
