@@ -13,20 +13,20 @@ import java.util.List;
  * Created by kevinwu on 10/19/16.
  */
 public class peerProcess {
-    CommonCfg commonCfg;
+    static CommonCfg commonCfg;
     List<Peer> peers;
     static int peerID;
     List<Connection> connections;
     Peer me;
 
     public static void main(String[] args) throws IOException {
+        commonCfg = new CommonCfg("Common.cfg");
         peerID = Integer.parseInt(args[0]);
         peerProcess client = new peerProcess();
         client.run();
     }
     void run() throws IOException {
         try{
-            //commonCfg = new CommonCfg("Common.cfg");
             peers = Utilities.readCfg("PeerInfo.cfg");
             connections = new ArrayList<>();
             for(Peer peer : peers){
@@ -89,17 +89,6 @@ public class peerProcess {
                 System.out.println("Message \"" + messageToSendServer.getMessage() + "\" sent");
                 Boolean connect = true;
                 message = (Message) in.readObject();
-                
-                switch(message.getType()){
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                }
                 
                 //show the message to the user
                 System.out.println("Receive message: \"" + message.getMessage() + "\" from client ");
