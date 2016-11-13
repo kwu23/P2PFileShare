@@ -138,6 +138,7 @@ public class peerProcess {
                         }
                         //sendMessage(out, new ChokeMessage());
                         //message = (Message) in.readObject();
+                        /*
                         switch(message.getValue()){
                             case 0: handleChokeMessage(); break;
                             case 1: sendMessage(out, handleUnchokeMessage()); break;
@@ -148,10 +149,10 @@ public class peerProcess {
                             case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
                             default: break;
                         }
-
+*/
 
                         //show the message to the user
-                        System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
+                        //System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
                     }
                 } catch (Exception classnot) {
                     System.err.println("Data received in unknown format");
