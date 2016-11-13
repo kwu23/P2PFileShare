@@ -26,7 +26,7 @@ public class peerProcess {
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
-        peerProcess.unchokeInterval = CommonCfg.getUnchokingInterval() * 1000000000;
+        peerProcess.unchokeInterval = CommonCfg.getUnchokingInterval() * (long) 1000000000;
         peerID = Integer.parseInt(args[0]);
         peerProcess client = new peerProcess();
         client.run();
