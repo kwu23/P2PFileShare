@@ -132,8 +132,7 @@ public class peerProcess {
                     long startTime = System.nanoTime();
                     while (connect) {
                         if(System.nanoTime() - startTime >= unchokeInterval){
-                            System.out.println("OPTIMISTIC" + CommonCfg.optimisticUnchokingInterval);
-                            System.out.println("UNCHOKING" + CommonCfg.unchokingInterval);
+                            System.out.println(unchokeInterval);
                             //sendMessage(out, new ChokeMessage());
                             startTime = System.nanoTime();
                         }

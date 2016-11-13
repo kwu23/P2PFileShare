@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d44fb2e0-ba3a-4a43-8ab7-2d94f697c532" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CommonCfg.java" afterPath="$PROJECT_DIR$/src/CommonCfg.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peerProcess.java" afterPath="$PROJECT_DIR$/src/peerProcess.java" />
     </list>
     <ignored path="P2PFileShare.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,27 +24,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-741">
-              <caret line="15" column="20" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="20" />
+            <state relative-caret-position="234">
+              <caret line="134" column="62" selection-start-line="134" selection-start-column="62" selection-end-line="134" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9307#9308#0" expanded="true" />
-                <element signature="e#9348#9349#0" expanded="true" />
-                <element signature="e#9398#9399#0" expanded="true" />
-                <element signature="e#9440#9441#0" expanded="true" />
-                <element signature="e#9651#9652#0" expanded="true" />
-                <element signature="e#9722#9723#0" expanded="true" />
-                <element signature="e#10680#10681#0" expanded="true" />
-                <element signature="e#10725#10726#0" expanded="true" />
-                <element signature="e#10760#10761#0" expanded="true" />
-                <element signature="e#10807#10808#0" expanded="true" />
-                <element signature="e#10844#10845#0" expanded="true" />
-                <element signature="e#10894#10895#0" expanded="true" />
-                <element signature="e#10926#10927#0" expanded="true" />
-                <element signature="e#10963#10964#0" expanded="true" />
+                <element signature="e#9179#9180#0" expanded="true" />
+                <element signature="e#9220#9221#0" expanded="true" />
+                <element signature="e#9270#9271#0" expanded="true" />
+                <element signature="e#9312#9313#0" expanded="true" />
+                <element signature="e#9523#9524#0" expanded="true" />
+                <element signature="e#9594#9595#0" expanded="true" />
+                <element signature="e#10552#10553#0" expanded="true" />
+                <element signature="e#10597#10598#0" expanded="true" />
+                <element signature="e#10632#10633#0" expanded="true" />
+                <element signature="e#10679#10680#0" expanded="true" />
+                <element signature="e#10716#10717#0" expanded="true" />
+                <element signature="e#10766#10767#0" expanded="true" />
+                <element signature="e#10798#10799#0" expanded="true" />
+                <element signature="e#10835#10836#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -147,7 +147,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommonCfg.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CommonCfg.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CommonCfg.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="330">
@@ -200,8 +200,8 @@
         <option value="$PROJECT_DIR$/src/Messages/PieceMessage.java" />
         <option value="$PROJECT_DIR$/src/Messages/RequestMessage.java" />
         <option value="$PROJECT_DIR$/src/Utilities.java" />
-        <option value="$PROJECT_DIR$/src/peerProcess.java" />
         <option value="$PROJECT_DIR$/src/CommonCfg.java" />
+        <option value="$PROJECT_DIR$/src/peerProcess.java" />
       </list>
     </option>
   </component>
@@ -798,12 +798,12 @@
       <workItem from="1478470513536" duration="268000" />
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
-      <workItem from="1479053673291" duration="14215000" />
+      <workItem from="1479053673291" duration="14364000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37464000" />
+    <option name="totallyTimeSpent" value="37613000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="952" extended-state="6" />
@@ -1010,20 +1010,20 @@
           <caret line="131" column="32" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9307#9308#0" expanded="true" />
-            <element signature="e#9348#9349#0" expanded="true" />
-            <element signature="e#9398#9399#0" expanded="true" />
-            <element signature="e#9440#9441#0" expanded="true" />
-            <element signature="e#9651#9652#0" expanded="true" />
-            <element signature="e#9722#9723#0" expanded="true" />
-            <element signature="e#10680#10681#0" expanded="true" />
-            <element signature="e#10725#10726#0" expanded="true" />
-            <element signature="e#10760#10761#0" expanded="true" />
-            <element signature="e#10807#10808#0" expanded="true" />
-            <element signature="e#10844#10845#0" expanded="true" />
-            <element signature="e#10894#10895#0" expanded="true" />
-            <element signature="e#10926#10927#0" expanded="true" />
-            <element signature="e#10963#10964#0" expanded="true" />
+            <element signature="e#9179#9180#0" expanded="true" />
+            <element signature="e#9220#9221#0" expanded="true" />
+            <element signature="e#9270#9271#0" expanded="true" />
+            <element signature="e#9312#9313#0" expanded="true" />
+            <element signature="e#9523#9524#0" expanded="true" />
+            <element signature="e#9594#9595#0" expanded="true" />
+            <element signature="e#10552#10553#0" expanded="true" />
+            <element signature="e#10597#10598#0" expanded="true" />
+            <element signature="e#10632#10633#0" expanded="true" />
+            <element signature="e#10679#10680#0" expanded="true" />
+            <element signature="e#10716#10717#0" expanded="true" />
+            <element signature="e#10766#10767#0" expanded="true" />
+            <element signature="e#10798#10799#0" expanded="true" />
+            <element signature="e#10835#10836#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1292,30 +1292,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-741">
-          <caret line="15" column="20" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9307#9308#0" expanded="true" />
-            <element signature="e#9348#9349#0" expanded="true" />
-            <element signature="e#9398#9399#0" expanded="true" />
-            <element signature="e#9440#9441#0" expanded="true" />
-            <element signature="e#9651#9652#0" expanded="true" />
-            <element signature="e#9722#9723#0" expanded="true" />
-            <element signature="e#10680#10681#0" expanded="true" />
-            <element signature="e#10725#10726#0" expanded="true" />
-            <element signature="e#10760#10761#0" expanded="true" />
-            <element signature="e#10807#10808#0" expanded="true" />
-            <element signature="e#10844#10845#0" expanded="true" />
-            <element signature="e#10894#10895#0" expanded="true" />
-            <element signature="e#10926#10927#0" expanded="true" />
-            <element signature="e#10963#10964#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Messages/PieceMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -1341,6 +1317,30 @@
             <element signature="imports" expanded="true" />
             <element signature="e#2414#2415#0" expanded="true" />
             <element signature="e#2456#2457#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="134" column="62" selection-start-line="134" selection-start-column="62" selection-end-line="134" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#9179#9180#0" expanded="true" />
+            <element signature="e#9220#9221#0" expanded="true" />
+            <element signature="e#9270#9271#0" expanded="true" />
+            <element signature="e#9312#9313#0" expanded="true" />
+            <element signature="e#9523#9524#0" expanded="true" />
+            <element signature="e#9594#9595#0" expanded="true" />
+            <element signature="e#10552#10553#0" expanded="true" />
+            <element signature="e#10597#10598#0" expanded="true" />
+            <element signature="e#10632#10633#0" expanded="true" />
+            <element signature="e#10679#10680#0" expanded="true" />
+            <element signature="e#10716#10717#0" expanded="true" />
+            <element signature="e#10766#10767#0" expanded="true" />
+            <element signature="e#10798#10799#0" expanded="true" />
+            <element signature="e#10835#10836#0" expanded="true" />
           </folding>
         </state>
       </provider>
