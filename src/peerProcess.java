@@ -83,6 +83,7 @@ public class peerProcess {
         private boolean[] theirBitfield;
         private boolean isChoked = true;
         private boolean interested = false;
+        private Neighbor neighbor;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
@@ -111,6 +112,9 @@ public class peerProcess {
                 }
                 if(connect){
                     sendMessage(out, "Connection successful!");
+                    int connectedPeerId = handshakeMessage.getPeerID();
+                    neighbor = new Neighbor(connectedPeerId);
+                    amountReceived.add(neighbor);
                 }
                 System.out.print("TEST2");
                 String handshakeVerification = (String) in.readObject();
@@ -129,6 +133,24 @@ public class peerProcess {
                     long startTime = System.nanoTime();
                     while (connect) {
                         if(System.nanoTime() - startTime >= unchokeInterval){
+                            int k = CommonCfg.getNumberOfPreferredNeighbors();
+                            ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
+                            tempNeighbors.addAll(amountReceived);
+                            int[] arrMax = new int[k];
+
+                            for (int i = 0; i < k; i++) {
+                                int max = -1;
+                                int index = -1;
+                                for (Neighbor n : tempNeighbors) {
+                                    if (n.getNumOfPieces() > max) {
+                                        max = n.getNumOfPieces();
+                                        index = tempNeighbors.indexOf(n);
+                                    }
+                                }
+                                tempNeighbors.remove(index);
+                                arrMax[k] = max;
+                            }
+
                             startTime = System.nanoTime();
                         }
                         message = (Message) in.readObject();
@@ -204,7 +226,7 @@ public class peerProcess {
                 }
             }
 
-            if(ones.size() = 0){
+            if(ones.size() == 0){
                 return false;
             }
             else{
@@ -226,9 +248,11 @@ public class peerProcess {
         public void handleInterestedMessage(){
             interested = true;
         }
+
         public void handleNotInterestedMessage(){
             interested = false;
         }
+
         public boolean[] handleHaveMessage(boolean[] bitfield, int index){
             bitfield[index] = true;
             interested = interestedCheck(and(not(ourBitfield), theirBitfield));
@@ -237,12 +261,15 @@ public class peerProcess {
         public PieceMessage handleRequestMessage(int index){
             return new PieceMessage(fileData[index], index);
         }
+
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            ourBitfield[pieceMessage.getIndex] = true;
+            ourBitfield[pieceMessage.getIndex()] = true;
             interested = interestedCheck(and(not(ourBitfield), theirBitfield));
+            neighbor.receivedPiece();
             return new HaveMessage(pieceMessage.getIndex());
         }
+
         void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
@@ -257,28 +284,6 @@ public class peerProcess {
             for(ObjectOutputStream connection : connections){
                 sendMessage(connection, msg);
             }
-        }
-    }
-
-
-    class Neighbor{
-        int peerID;
-        int numOfPiecesReceived;
-        public Neighbor(int peerID){
-            this.peerID = peerID;
-            numOfPiecesReceived = 0;
-        }
-        public void receivedPiece(){
-            numOfPiecesReceived++;
-        }
-        public void resetPieces(){
-            numOfPiecesReceived = 0;
-        }
-        public int getNumOfPieces(){
-            return numOfPiecesReceived;
-        }
-        public int getPeerID(){
-            return peerID;
         }
     }
 
