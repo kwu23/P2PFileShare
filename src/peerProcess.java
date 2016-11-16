@@ -21,6 +21,7 @@ public class peerProcess {
     static byte[][] fileData;
     static boolean[] ourBitfield;
     static long unchokeInterval;
+    static ArrayList<Integer> preferredNeighbors;
     static List<Neighbor> amountReceived = new ArrayList<>();
     static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
 
@@ -83,6 +84,7 @@ public class peerProcess {
         private boolean[] theirBitfield;
         private boolean isChoked = true;
         private boolean interested = false;
+        private boolean areWeInterested = false;
         private Neighbor neighbor;
 
         public Handler(Socket connection, List<Peer> peers) {
@@ -104,7 +106,6 @@ public class peerProcess {
                 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
-                System.out.print("TEST1");
                 if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
                     connect = false;
                     sendMessage(out, "Disconnecting due to invalid handshake");
@@ -116,7 +117,7 @@ public class peerProcess {
                     neighbor = new Neighbor(connectedPeerId);
                     amountReceived.add(neighbor);
                 }
-                System.out.print("TEST2");
+
                 String handshakeVerification = (String) in.readObject();
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
@@ -127,7 +128,10 @@ public class peerProcess {
                     sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
                     BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
-                    interested = interestedCheck(and(not(ourBitfield), theirBitfield));
+                    if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
+                        sendMessage(out, new InterestedMessage());
+                        areWeInterested = true;
+                    }
                 }
                 try {
                     long startTime = System.nanoTime();
@@ -136,19 +140,45 @@ public class peerProcess {
                             int k = CommonCfg.getNumberOfPreferredNeighbors();
                             ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
                             tempNeighbors.addAll(amountReceived);
-                            int[] arrMax = new int[k];
+                            ArrayList<Integer> arrMax = new ArrayList<Integer>();
 
                             for (int i = 0; i < k; i++) {
                                 int max = -1;
                                 int index = -1;
                                 for (Neighbor n : tempNeighbors) {
-                                    if (n.getNumOfPieces() > max) {
+                                    if (n.getNumOfPieces() > max && interested) {
                                         max = n.getNumOfPieces();
                                         index = tempNeighbors.indexOf(n);
                                     }
                                 }
+
+                                arrMax.add(tempNeighbors.get(index).getPeerID());
                                 tempNeighbors.remove(index);
-                                arrMax[k] = max;
+
+                            }
+
+                            for (Integer i : arrMax) {
+                                if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
+                                    sendMessage(out, new UnchokeMessage());
+                                }
+                            }
+
+                            for(int i = 0; i < preferredNeighbors.size(); i++){
+                                if(!arrMax.contains(preferredNeighbors.get(i))) {
+                                    preferredNeighbors.remove(i);
+                                    sendMessage(out, new ChokeMessage());
+                                }
+                            }
+
+                            for (Integer i : arrMax) {
+                                if(!preferredNeighbors.contains(i)) {
+                                    preferredNeighbors.add(i);
+                                }
+                            }
+
+                            // LOGGING if preferred neighbor exceeds k
+                            if (preferredNeighbors.size() > k) {
+                                System.out.println("Preferred Neighbors exceeded k: " + k);
                             }
 
                             startTime = System.nanoTime();
@@ -247,6 +277,7 @@ public class peerProcess {
 
         public void handleInterestedMessage(){
             interested = true;
+            System.out.println("Peer is interested");
         }
 
         public void handleNotInterestedMessage(){
@@ -255,7 +286,14 @@ public class peerProcess {
 
         public boolean[] handleHaveMessage(boolean[] bitfield, int index){
             bitfield[index] = true;
-            interested = interestedCheck(and(not(ourBitfield), theirBitfield));
+            if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
+                sendMessage(out, new InterestedMessage());
+                areWeInterested = true;
+            }
+            else if(!interestedCheck(and(not(ourBitfield), theirBitfield)) && areWeInterested) {
+                sendMessage(out, new NotInterestedMessage());
+                areWeInterested = false;
+            }
             return bitfield;
         }
         public PieceMessage handleRequestMessage(int index){
@@ -265,7 +303,14 @@ public class peerProcess {
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
             ourBitfield[pieceMessage.getIndex()] = true;
-            interested = interestedCheck(and(not(ourBitfield), theirBitfield));
+            if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
+                sendMessage(out, new InterestedMessage());
+                areWeInterested = true;
+            }
+            else if(!interestedCheck(and(not(ourBitfield), theirBitfield)) && areWeInterested) {
+                sendMessage(out, new NotInterestedMessage());
+                areWeInterested = false;
+            }
             neighbor.receivedPiece();
             return new HaveMessage(pieceMessage.getIndex());
         }
