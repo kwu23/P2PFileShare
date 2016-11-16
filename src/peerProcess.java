@@ -123,22 +123,16 @@ public class peerProcess {
                     sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
                     BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
-                    System.out.println("THEIR BITFIELD: ");
-                    for(int x=0; x<theirBitfield.length; x++){
-                        System.out.print(theirBitfield[x]);
-                    }
+                    interested = interestedCheck(and(not(ourBitfield), theirBitfield));
                 }
                 try {
                     long startTime = System.nanoTime();
                     while (connect) {
                         if(System.nanoTime() - startTime >= unchokeInterval){
-                            System.out.println(unchokeInterval);
-                            //sendMessage(out, new ChokeMessage());
                             startTime = System.nanoTime();
                         }
-                        //sendMessage(out, new ChokeMessage());
-                        //message = (Message) in.readObject();
-                        /*
+                        message = (Message) in.readObject();
+                        
                         switch(message.getValue()){
                             case 0: handleChokeMessage(); break;
                             case 1: sendMessage(out, handleUnchokeMessage()); break;
@@ -149,7 +143,6 @@ public class peerProcess {
                             case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
                             default: break;
                         }
-*/
 
                         //show the message to the user
                         //System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
@@ -195,11 +188,28 @@ public class peerProcess {
                     ones.add(x);
                 }
             }
+
             int num = ((int)((Math.random())*ones.size())-1);
             if(num < 0 || num >= ones.size()){
                 return 0;
             }
             return ones.get(num);
+        }
+
+        public boolean interestedCheck(boolean[] bitfield){
+            List<Integer> ones = new ArrayList<>();
+            for(int x=0; x<bitfield.length; x++){
+                if(bitfield[x]){
+                    ones.add(x);
+                }
+            }
+
+            if(ones.size() = 0){
+                return false;
+            }
+            else{
+                return true;
+            }
         }
 
         public void handleChokeMessage(){
@@ -221,6 +231,7 @@ public class peerProcess {
         }
         public boolean[] handleHaveMessage(boolean[] bitfield, int index){
             bitfield[index] = true;
+            interested = interestedCheck(and(not(ourBitfield), theirBitfield));
             return bitfield;
         }
         public PieceMessage handleRequestMessage(int index){
@@ -228,6 +239,8 @@ public class peerProcess {
         }
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
+            ourBitfield[pieceMessage.getIndex] = true;
+            interested = interestedCheck(and(not(ourBitfield), theirBitfield));
             return new HaveMessage(pieceMessage.getIndex());
         }
         void sendMessage(ObjectOutputStream out, Object msg)

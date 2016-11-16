@@ -12,6 +12,7 @@ public class PieceMessage extends Message{
     public PieceMessage(byte[] payload, int index){
     	this.length = payload.length + 5;
     	this.payload = payload;
+    	this.index = index;
     }
 
     public int getValue(){
