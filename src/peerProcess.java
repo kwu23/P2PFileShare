@@ -47,12 +47,12 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                new Handler(tempSocket, peers, me).start();
+                new Handler(tempSocket, peers, me.hasFile()).start();
                 System.out.println("me: " + me.getPeerID());
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
-                new Handler(listener.accept(), peers, me).start();
+                new Handler(listener.accept(), peers, me.hasFile()).start();
             }
         }
         catch (ConnectException e) {
@@ -88,12 +88,12 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
-        private Peer meInHandler;
+        private boolean hasFileHandler;
 
-        public Handler(Socket connection, List<Peer> peers, Peer me) {
+        public Handler(Socket connection, List<Peer> peers, boolean hasFile) {
             this.connection = connection;
             this.peers = peers;
-            this.meInHandler = me;
+            this.hasFileHandler = hasFile;
         }
 
         public void run() {
@@ -143,7 +143,7 @@ public class peerProcess {
                     while (connect) {
                         // if (hasFile) random unchoke else if...
                          if(System.nanoTime() - startTime >= unchokeInterval){
-                             if (meInHandler.hasFile()) {
+                             if (hasFileHandler) {
                                  System.out.println("I hab a file");
                                  randomCheckPrefferedNeighbors();
                              } else {
