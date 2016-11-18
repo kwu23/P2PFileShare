@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by kevinwu on 10/19/16.
@@ -39,7 +40,6 @@ public class peerProcess {
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
-                    System.out.println("Me is: " + me.getPeerID());
                     System.out.println("DO I HAVE FILE? " + peer.hasFile());
                     peerProcess.fileData = Utilities.getBytesOfFile(CommonCfg.getFileName(), peer.hasFile());
                     peerProcess.ourBitfield = Utilities.createBitfield(me.hasFile());
@@ -47,8 +47,8 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                System.out.println("My Peer ID:" + peer.getPeerID());
                 new Handler(tempSocket, peers, me).start();
+                System.out.println("me: " + me.getPeerID());
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
