@@ -138,9 +138,13 @@ public class peerProcess {
                 }
                 try {
                     long startTime = System.nanoTime();
+                    int counter = 0;
                     while (connect) {
                         // if (hasFile) random unchoke else if...
+
+                        System.out.println("We are in while(connect) " + counter++);
                          if(System.nanoTime() - startTime >= unchokeInterval){
+                             System.out.println("In nanotime if cond");
                              if (meInHandler.hasFile()) {
                                 randomCheckPrefferedNeighbors();
                              } else {
