@@ -92,6 +92,7 @@ public class peerProcess {
             this.connection = connection;
             this.peers = peers;
             this.meInHandler = me;
+            System.out.println("Handler creation me is: " + meInHandler.getPeerID());
         }
 
         public void run() {
