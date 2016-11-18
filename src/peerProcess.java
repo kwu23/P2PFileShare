@@ -351,18 +351,23 @@ public class peerProcess {
             tempNeighbors.addAll(amountReceived);
             ArrayList<Integer> arrMax = new ArrayList<Integer>();
 
-            for (int i = 0; i < k; i++) {
-                int max = -1;
-                int index = -1;
-                for (Neighbor n : tempNeighbors) {
-                    if (n.getNumOfPieces() > max && interested) {
-                        max = n.getNumOfPieces();
-                        index = tempNeighbors.indexOf(n);
-                    }
-                }
+            int peerListSize = peers.size();
 
-                arrMax.add(tempNeighbors.get(index).getPeerID());
-                tempNeighbors.remove(index);
+            for (int i = 0; i < k; i++) {
+                if(i < peerListSize){
+                    int max = -1;
+                    int index = -1;
+
+                    for (Neighbor n : tempNeighbors) {
+                        if (n.getNumOfPieces() > max && interested) {
+                            max = n.getNumOfPieces();
+                            index = tempNeighbors.indexOf(n);
+                        }
+                    }
+
+                    arrMax.add(tempNeighbors.get(index).getPeerID());
+                    tempNeighbors.remove(index);
+                }
 
             }
 
@@ -372,9 +377,11 @@ public class peerProcess {
                 }
             }
 
-            for(int i = 0; i < preferredNeighbors.size(); i++){
-                if(!arrMax.contains(preferredNeighbors.get(i))) {
-                    preferredNeighbors.remove(i);
+            ArrayList<Integer> prefTempNeighbor = new ArrayList<>();
+            prefTempNeighbor.addAll(preferredNeighbors);
+            for(int i = 0; i < prefTempNeighbor.size(); i++){
+                if(!arrMax.contains(prefTempNeighbor.get(i))) {
+                    preferredNeighbors.remove(prefTempNeighbor.get(i));
 //                    sendMessage(out, new ChokeMessage());
                     System.out.println("New choke msg sent");
                 }
