@@ -141,6 +141,7 @@ public class peerProcess {
                     while (connect) {
                         // if (hasFile) random unchoke else if...
                          if(System.nanoTime() - startTime >= unchokeInterval){
+                             System.out.println("It has been 5 seconds");
                              if (meInHandler.hasFile()) {
                                  System.out.println("I hab a file");
                                  randomCheckPrefferedNeighbors();
@@ -163,7 +164,7 @@ public class peerProcess {
 //                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
 //                            default: break;
 //                        }
-
+                        System.out.println("craiglu");
                         //show the message to the user
                         //System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
                     }
