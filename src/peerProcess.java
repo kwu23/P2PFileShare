@@ -22,7 +22,7 @@ public class peerProcess {
     static boolean[] ourBitfield;
     static long unchokeInterval;
     static ArrayList<Integer> preferredNeighbors;
-    static List<Neighbor> amountReceived = new ArrayList<>();
+    static ArrayList<Neighbor> amountReceived;
     static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
@@ -46,11 +46,11 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                new Handler(tempSocket, peers).start();
+                new Handler(tempSocket, peers, me).start();
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
-                new Handler(listener.accept(), peers).start();
+                new Handler(listener.accept(), peers, me).start();
             }
         }
         catch (ConnectException e) {
@@ -86,10 +86,12 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
+        private Peer meInHandler;
 
-        public Handler(Socket connection, List<Peer> peers) {
+        public Handler(Socket connection, List<Peer> peers, Peer me) {
             this.connection = connection;
             this.peers = peers;
+            this.meInHandler = me;
         }
 
         public void run() {
@@ -136,50 +138,13 @@ public class peerProcess {
                 try {
                     long startTime = System.nanoTime();
                     while (connect) {
-                        if(System.nanoTime() - startTime >= unchokeInterval){
-                            int k = CommonCfg.getNumberOfPreferredNeighbors();
-                            ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
-                            tempNeighbors.addAll(amountReceived);
-                            ArrayList<Integer> arrMax = new ArrayList<Integer>();
-
-                            for (int i = 0; i < k; i++) {
-                                int max = -1;
-                                int index = -1;
-                                for (Neighbor n : tempNeighbors) {
-                                    if (n.getNumOfPieces() > max && interested) {
-                                        max = n.getNumOfPieces();
-                                        index = tempNeighbors.indexOf(n);
-                                    }
-                                }
-
-                                arrMax.add(tempNeighbors.get(index).getPeerID());
-                                tempNeighbors.remove(index);
-
-                            }
-
-                            for (Integer i : arrMax) {
-                                if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
-                                    sendMessage(out, new UnchokeMessage());
-                                }
-                            }
-
-                            for(int i = 0; i < preferredNeighbors.size(); i++){
-                                if(!arrMax.contains(preferredNeighbors.get(i))) {
-                                    preferredNeighbors.remove(i);
-                                    sendMessage(out, new ChokeMessage());
-                                }
-                            }
-
-                            for (Integer i : arrMax) {
-                                if(!preferredNeighbors.contains(i)) {
-                                    preferredNeighbors.add(i);
-                                }
-                            }
-
-                            // LOGGING if preferred neighbor exceeds k
-                            if (preferredNeighbors.size() > k) {
-                                System.out.println("Preferred Neighbors exceeded k: " + k);
-                            }
+                        // if (hasFile) random unchoke else if...
+                         if(System.nanoTime() - startTime >= unchokeInterval){
+                             if (meInHandler.hasFile()) {
+                                randomCheckPrefferedNeighbors();
+                             } else {
+                                 checkPreferredNeighbors();
+                             }
 
                             startTime = System.nanoTime();
                         }
@@ -248,6 +213,7 @@ public class peerProcess {
             return ones.get(num);
         }
 
+        // Check if we are interested in others
         public boolean interestedCheck(boolean[] bitfield){
             List<Integer> ones = new ArrayList<>();
             for(int x=0; x<bitfield.length; x++){
@@ -328,6 +294,94 @@ public class peerProcess {
         void sendMessageToAll(ArrayList<ObjectOutputStream> connections, Object msg){
             for(ObjectOutputStream connection : connections){
                 sendMessage(connection, msg);
+            }
+        }
+
+        void randomCheckPrefferedNeighbors() {
+            int k = CommonCfg.getNumberOfPreferredNeighbors();
+            int count = 0;
+            ArrayList<Integer> interestedPeers = new ArrayList<>();
+            ArrayList<Integer> randPeers = new ArrayList<>();
+
+            for (Peer p : peers) {
+                if (!p.hasFile()) {
+                    interestedPeers.add(p.getPeerID());
+                }
+            }
+
+            for (int i = 0; i < k; i++) {
+                int position = (int) (Math.random() * (interestedPeers.size() - 1));
+                randPeers.add(interestedPeers.get(position));
+                interestedPeers.remove(position);
+            }
+
+            for (Integer i : randPeers) {
+                if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
+//                    sendMessage(out, new UnchokeMessage());
+                    System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
+                }
+            }
+
+            for(int i = 0; i < preferredNeighbors.size(); i++){
+                if(!randPeers.contains(preferredNeighbors.get(i))) {
+                    System.out.println("New rand choke msg sent to " + preferredNeighbors.get(i));
+                    preferredNeighbors.remove(i);
+//                    sendMessage(out, new ChokeMessage());
+
+                }
+            }
+
+            for (Integer i : randPeers) {
+                if(!preferredNeighbors.contains(i)) {
+                    preferredNeighbors.add(i);
+                }
+            }
+        }
+
+        void checkPreferredNeighbors() {
+            int k = CommonCfg.getNumberOfPreferredNeighbors();
+            ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
+            tempNeighbors.addAll(amountReceived);
+            ArrayList<Integer> arrMax = new ArrayList<Integer>();
+
+            for (int i = 0; i < k; i++) {
+                int max = -1;
+                int index = -1;
+                for (Neighbor n : tempNeighbors) {
+                    if (n.getNumOfPieces() > max && interested) {
+                        max = n.getNumOfPieces();
+                        index = tempNeighbors.indexOf(n);
+                    }
+                }
+
+                arrMax.add(tempNeighbors.get(index).getPeerID());
+                tempNeighbors.remove(index);
+
+            }
+
+            for (Integer i : arrMax) {
+                if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
+                    sendMessage(out, new UnchokeMessage());
+                }
+            }
+
+            for(int i = 0; i < preferredNeighbors.size(); i++){
+                if(!arrMax.contains(preferredNeighbors.get(i))) {
+                    preferredNeighbors.remove(i);
+//                    sendMessage(out, new ChokeMessage());
+                    System.out.println("New choke msg sent");
+                }
+            }
+
+            for (Integer i : arrMax) {
+                if(!preferredNeighbors.contains(i)) {
+                    preferredNeighbors.add(i);
+                }
+            }
+
+            // LOGGING if preferred neighbor exceeds k
+            if (preferredNeighbors.size() > k) {
+                System.out.println("Preferred Neighbors exceeded k: " + k);
             }
         }
     }
