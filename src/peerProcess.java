@@ -148,18 +148,18 @@ public class peerProcess {
 
                             startTime = System.nanoTime();
                         }
-                        message = (Message) in.readObject();
+//                        message = (Message) in.readObject();
                         
-                        switch(message.getValue()){
-                            case 0: handleChokeMessage(); break;
-                            case 1: sendMessage(out, handleUnchokeMessage()); break;
-                            case 2: handleInterestedMessage(); break;
-                            case 3: handleNotInterestedMessage(); break;
-                            case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
-                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
-                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
-                            default: break;
-                        }
+//                        switch(message.getValue()){
+//                            case 0: handleChokeMessage(); break;
+//                            case 1: sendMessage(out, handleUnchokeMessage()); break;
+//                            case 2: handleInterestedMessage(); break;
+//                            case 3: handleNotInterestedMessage(); break;
+//                            case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
+//                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
+//                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
+//                            default: break;
+//                        }
 
                         //show the message to the user
                         //System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
