@@ -21,8 +21,8 @@ public class peerProcess {
     static byte[][] fileData;
     static boolean[] ourBitfield;
     static long unchokeInterval;
-    static ArrayList<Integer> preferredNeighbors;
-    static ArrayList<Neighbor> amountReceived;
+    static ArrayList<Integer> preferredNeighbors = new ArrayList<>();
+    static ArrayList<Neighbor> amountReceived = new ArrayList<>();
     static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
