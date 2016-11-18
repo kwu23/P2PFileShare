@@ -302,20 +302,24 @@ public class peerProcess {
 
         void randomCheckPrefferedNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
-            int count = 0;
             ArrayList<Integer> interestedPeers = new ArrayList<>();
             ArrayList<Integer> randPeers = new ArrayList<>();
 
             for (Peer p : peers) {
                 if (!p.hasFile()) {
+                    System.out.print("Peer " + p.getPeerID());
                     interestedPeers.add(p.getPeerID());
                 }
             }
 
+            int interestedSize = interestedPeers.size();
             for (int i = 0; i < k; i++) {
-                int position = (int) (Math.random() * (interestedPeers.size() - 1));
-                randPeers.add(interestedPeers.get(position));
-                interestedPeers.remove(position);
+                if (i < interestedSize) {
+                    int position = (int) (Math.random() * (interestedPeers.size() - 1));
+                    randPeers.add(interestedPeers.get(position));
+                    interestedPeers.remove(position);
+                    System.out.print("Rand " + i);
+                }
             }
 
             for (Integer i : randPeers) {
