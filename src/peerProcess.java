@@ -1,10 +1,7 @@
 import Messages.*;
 
 import java.io.*;
-import java.net.ConnectException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +15,7 @@ public class peerProcess {
     List<Peer> peers;
     static int peerID;
     List<Connection> connections;
-    Peer me;
+    static Peer me;
     static byte[][] fileData;
     static boolean[] ourBitfield;
     static long unchokeInterval;
@@ -47,12 +44,12 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                new Handler(tempSocket, peers, me.hasFile()).start();
+                new Handler(tempSocket, peers).start();
                 System.out.println("me: " + me.getPeerID());
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
-                new Handler(listener.accept(), peers, me.hasFile()).start();
+                new Handler(listener.accept(), peers).start();
             }
         }
         catch (ConnectException e) {
@@ -88,12 +85,10 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
-        private boolean hasFileHandler;
 
-        public Handler(Socket connection, List<Peer> peers, boolean hasFile) {
+        public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
             this.peers = peers;
-            this.hasFileHandler = hasFile;
         }
 
         public void run() {
@@ -102,6 +97,7 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
+                connection.setSoTimeout(5000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
@@ -143,7 +139,7 @@ public class peerProcess {
                     while (connect) {
                         // if (hasFile) random unchoke else if...
                          if(System.nanoTime() - startTime >= unchokeInterval){
-                             if (hasFileHandler) {
+                             if (me.hasFile()) {
                                  System.out.println("I hab a file");
                                  randomCheckPrefferedNeighbors();
                              } else {
@@ -153,20 +149,25 @@ public class peerProcess {
 
                             startTime = System.nanoTime();
                         }
-//                        message = (Message) in.readObject();
-                        
-//                        switch(message.getValue()){
-//                            case 0: handleChokeMessage(); break;
-//                            case 1: sendMessage(out, handleUnchokeMessage()); break;
-//                            case 2: handleInterestedMessage(); break;
-//                            case 3: handleNotInterestedMessage(); break;
-//                            case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
-//                            case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
-//                            case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
-//                            default: break;
-//                        }
-                        //show the message to the user
-                        //System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
+                        try{
+                            message = (Message) in.readObject();
+                        }catch (SocketTimeoutException e){
+                            message = null;
+                        }
+
+                        if(message != null){
+                            switch(message.getValue()){
+                                case 0: handleChokeMessage(); break;
+                                case 1: sendMessage(out, handleUnchokeMessage()); break;
+                                case 2: handleInterestedMessage(); break;
+                                case 3: handleNotInterestedMessage(); break;
+                                case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
+                                case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
+                                case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
+                                default: break;
+                            }
+                            System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
+                        }
                     }
                 } catch (Exception classnot) {
                     System.err.println("Data received in unknown format");
