@@ -303,45 +303,24 @@ public class peerProcess {
 
         void randomCheckPrefferedNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
-            ArrayList<Integer> interestedPeers = new ArrayList<>();
-            ArrayList<Integer> randPeers = new ArrayList<>();
-
+            int numOfInterestedPeers = 0;
             for (Peer p : peers) {
                 if (!p.hasFile()) {
-                    System.out.print("Peer " + p.getPeerID());
-                    interestedPeers.add(p.getPeerID());
+                    numOfInterestedPeers++;
                 }
             }
 
-            int interestedSize = interestedPeers.size();
-            for (int i = 0; i < k; i++) {
-                if (i < interestedSize) {
-                    int position = (int) (Math.random() * (interestedPeers.size() - 1));
-                    randPeers.add(interestedPeers.get(position));
-                    interestedPeers.remove(position);
-                    System.out.print("Rand " + i);
-                }
-            }
-
-            for (Integer i : randPeers) {
-                if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
+            if(Math.random() < (double) k/ (double) numOfInterestedPeers && interested && preferredNeighbors.size() < k) {
+                if(!preferredNeighbors.contains(neighbor.getPeerID())){
                     sendMessage(out, new UnchokeMessage());
+                    preferredNeighbors.add(neighbor.getPeerID());
                     System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
                 }
-            }
-
-            for(int i = 0; i < preferredNeighbors.size(); i++){
-                if(!randPeers.contains(preferredNeighbors.get(i))) {
-                    System.out.println("New rand choke msg sent to " + preferredNeighbors.get(i));
-                    preferredNeighbors.remove(i);
+            }else{
+                if(preferredNeighbors.contains(neighbor.getPeerID())){
+                    System.out.println("New rand choke msg sent to " + preferredNeighbors.get(neighbor.getPeerID()));
+                    preferredNeighbors.remove(neighbor.getPeerID());
                     sendMessage(out, new ChokeMessage());
-
-                }
-            }
-
-            for (Integer i : randPeers) {
-                if(!preferredNeighbors.contains(i)) {
-                    preferredNeighbors.add(i);
                 }
             }
         }
