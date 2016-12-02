@@ -355,13 +355,13 @@ public class peerProcess {
             int peerListSize = peers.size();
 
             for (int i = 0; i < k; i++) {
-                if(i < peerListSize){
+                if(i < peerListSize && interested){
                     int max = -1;
                     int index = -1;
 
                     for (Neighbor n : tempNeighbors) {
                         System.out.println(tempNeighbors.size());
-                        if (n.getNumOfPieces() > max && interested) {
+                        if (n.getNumOfPieces() > max) {
                             System.out.println("Neighbor max found");
                             max = n.getNumOfPieces();
                             index = tempNeighbors.indexOf(n);
