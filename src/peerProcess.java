@@ -310,12 +310,14 @@ public class peerProcess {
                     numOfInterestedPeers++;
                 }
             }
+            boolean wasUnchoked = false;
             if(preferredNeighbors.contains(neighbor.getPeerID())){
+                wasUnchoked = true;
                 preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
             }
             if(Math.random() < (double) k/ (double) numOfInterestedPeers && interested && preferredNeighbors.size() < k) {
                 preferredNeighbors.add(neighbor.getPeerID());
-                if(!preferredNeighbors.contains(neighbor.getPeerID())){
+                if(!wasUnchoked){
                     sendMessage(out, new UnchokeMessage());
                     System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
                 }
