@@ -350,7 +350,7 @@ public class peerProcess {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
             tempNeighbors.addAll(amountReceived);
-            ArrayList<Integer> arrMax = new ArrayList<Integer>();
+            ArrayList<Integer> arrMax = new ArrayList<>();
 
             int peerListSize = peers.size();
 
@@ -360,7 +360,9 @@ public class peerProcess {
                     int index = -1;
 
                     for (Neighbor n : tempNeighbors) {
+                        System.out.println(tempNeighbors.size());
                         if (n.getNumOfPieces() > max && interested) {
+                            System.out.println("Neighbor max found");
                             max = n.getNumOfPieces();
                             index = tempNeighbors.indexOf(n);
                         }
