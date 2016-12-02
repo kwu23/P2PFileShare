@@ -168,8 +168,8 @@ public class peerProcess {
                             System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
                         }
                     }
-                } catch (Exception classnot) {
-                    System.err.println("Data received in unknown format");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } catch (IOException ioException) {
                 System.out.println("Disconnect with Client ");
