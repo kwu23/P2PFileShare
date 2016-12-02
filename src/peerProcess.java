@@ -310,27 +310,20 @@ public class peerProcess {
                     numOfInterestedPeers++;
                 }
             }
-
-            if(k > numOfInterestedPeers){
+            if(preferredNeighbors.contains(neighbor.getPeerID())){
+                preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
+            }
+            if(Math.random() < (double) k/ (double) numOfInterestedPeers && interested && preferredNeighbors.size() < k) {
+                preferredNeighbors.add(neighbor.getPeerID());
                 if(!preferredNeighbors.contains(neighbor.getPeerID())){
                     sendMessage(out, new UnchokeMessage());
-                    preferredNeighbors.add(neighbor.getPeerID());
                     System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
                 }
-            }
-            else {
-                if (Math.random() < (double) k / (double) numOfInterestedPeers && interested && preferredNeighbors.size() < k) {
-                    if (!preferredNeighbors.contains(neighbor.getPeerID())) {
-                        sendMessage(out, new UnchokeMessage());
-                        preferredNeighbors.add(neighbor.getPeerID());
-                        System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
-                    }
-                } else {
-                    if (preferredNeighbors.contains(neighbor.getPeerID())) {
-                        System.out.println("New rand choke msg sent to " + neighbor.getPeerID());
-                        preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
-                        sendMessage(out, new ChokeMessage());
-                    }
+            }else{
+                if(preferredNeighbors.contains(neighbor.getPeerID())){
+                    System.out.println("New rand choke msg sent to " + neighbor.getPeerID());
+                    preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
+                    sendMessage(out, new ChokeMessage());
                 }
             }
         }
