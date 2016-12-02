@@ -128,7 +128,7 @@ public class peerProcess {
                     BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
                     if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
-//                        sendMessage(out, new InterestedMessage());
+                        sendMessage(out, new InterestedMessage());
                         System.out.println("Sending out interested msg to " + neighbor.getPeerID());
                         areWeInterested = true;
                     }
