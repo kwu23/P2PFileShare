@@ -45,7 +45,6 @@ public class peerProcess {
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
                 new Handler(tempSocket, peers).start();
-                System.out.println("me: " + me.getPeerID());
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
