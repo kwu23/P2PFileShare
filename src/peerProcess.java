@@ -325,7 +325,7 @@ public class peerProcess {
 
             for (Integer i : randPeers) {
                 if(i == neighbor.getPeerID() && !preferredNeighbors.contains(i)) {
-//                    sendMessage(out, new UnchokeMessage());
+                    sendMessage(out, new UnchokeMessage());
                     System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
                 }
             }
@@ -334,7 +334,7 @@ public class peerProcess {
                 if(!randPeers.contains(preferredNeighbors.get(i))) {
                     System.out.println("New rand choke msg sent to " + preferredNeighbors.get(i));
                     preferredNeighbors.remove(i);
-//                    sendMessage(out, new ChokeMessage());
+                    sendMessage(out, new ChokeMessage());
 
                 }
             }
@@ -362,7 +362,6 @@ public class peerProcess {
                     for (Neighbor n : tempNeighbors) {
                         System.out.println(tempNeighbors.size());
                         if (n.getNumOfPieces() > max) {
-                            System.out.println("Neighbor max found");
                             max = n.getNumOfPieces();
                             index = tempNeighbors.indexOf(n);
                         }
@@ -385,7 +384,7 @@ public class peerProcess {
             for(int i = 0; i < prefTempNeighbor.size(); i++){
                 if(!arrMax.contains(prefTempNeighbor.get(i))) {
                     preferredNeighbors.remove(prefTempNeighbor.get(i));
-//                    sendMessage(out, new ChokeMessage());
+                    sendMessage(out, new ChokeMessage());
                     System.out.println("New choke msg sent");
                 }
             }
