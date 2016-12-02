@@ -320,7 +320,7 @@ public class peerProcess {
             }else{
                 if(preferredNeighbors.contains(neighbor.getPeerID())){
                     System.out.println("New rand choke msg sent to " + neighbor.getPeerID());
-                    preferredNeighbors.remove(neighbor.getPeerID());
+                    preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
                     sendMessage(out, new ChokeMessage());
                 }
             }
