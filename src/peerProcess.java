@@ -303,6 +303,7 @@ public class peerProcess {
 
         void randomCheckPrefferedNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
+            System.out.println("k: " + k);
             int numOfInterestedPeers = 0;
             for (Peer p : peers) {
                 if (!p.hasFile()) {
@@ -318,7 +319,7 @@ public class peerProcess {
                 }
             }else{
                 if(preferredNeighbors.contains(neighbor.getPeerID())){
-                    System.out.println("New rand choke msg sent to " + preferredNeighbors.get(neighbor.getPeerID()));
+                    System.out.println("New rand choke msg sent to " + neighbor.getPeerID());
                     preferredNeighbors.remove(neighbor.getPeerID());
                     sendMessage(out, new ChokeMessage());
                 }
