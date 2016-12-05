@@ -199,7 +199,7 @@ public class peerProcess {
                                 case 2: handleInterestedMessage(); break;                                                                               //interested
                                 case 3: handleNotInterestedMessage(); break;                                                                            //not interested
                                 case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
-                                case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;           //request
+                                case 6: sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;                         //request
                                 case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
                                 default: break;
                             }
