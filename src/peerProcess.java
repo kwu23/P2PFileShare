@@ -145,11 +145,11 @@ public class peerProcess {
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
                 if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
                     connect = false;
-                    //sendMessage(out, "Disconnecting due to invalid handshake");
+                    sendMessage(out, "Disconnecting due to invalid handshake");
                     System.out.println("Disconnect with Client due to invalid handshake");
                 }
                 if(connect){
-                    //sendMessage(out, "Connection successful!");
+                    sendMessage(out, "Connection successful!");
                     int connectedPeerId = handshakeMessage.getPeerID();
                     neighbor = new Neighbor(connectedPeerId);
                     amountReceived.add(neighbor);
