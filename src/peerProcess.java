@@ -320,8 +320,22 @@ public class peerProcess {
                 sendMessage(out, new NotInterestedMessage());
                 areWeInterested = false;
             }
+            System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
             neighbor.receivedPiece();
+            if(areWeInterested && !isChoked){
+                sendMessage(out, new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
+            }
             return new HaveMessage(pieceMessage.getIndex());
+        }
+
+        public double currentBits(){
+            double total = 0;
+            for(int x=0; x<ourBitfield.length; x++){
+                if(ourBitfield[x]){
+                    total++;
+                }
+            }
+            return total;
         }
 
         void sendMessage(ObjectOutputStream out, Object msg)
