@@ -36,7 +36,7 @@ public class peerProcess {
         peerProcess client = new peerProcess();
         client.run();
     }
-    public static void sendMessageToAll(HaveMessage msg){
+    public static void sendMessageToAll(int msg){
         for(int x=0; x<handlers.size(); x++){
             handlers.get(x).sendHaveMessage(msg);
         }
@@ -310,7 +310,7 @@ public class peerProcess {
             return new PieceMessage(fileData[index], index);
         }
 
-        public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
+        public int handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
             //System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
@@ -327,7 +327,7 @@ public class peerProcess {
             if(areWeInterested && !isChoked){
                 sendMessage(out, new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
             }
-            return new HaveMessage(pieceMessage.getIndex());
+            return pieceMessage.getIndex();
         }
 
         public double currentBits(){
@@ -350,8 +350,8 @@ public class peerProcess {
                 ioException.printStackTrace();
             }
         }
-        void sendHaveMessage(HaveMessage msg){
-            sendMessage(out, msg);
+        void sendHaveMessage(int index){
+            sendMessage(out, new HaveMessage(index));
         }
 
         void randomCheckPrefferedNeighbors() {
