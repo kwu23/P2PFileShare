@@ -43,12 +43,14 @@ public class peerProcess {
     }
     public static void optimisticallyUnchokeSomeone(){
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
-            for(int x=0; x<handlers.size()*5; x++){
-                chokePreviousOptimisticallyunchokedPeer();
-                optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-                if(handlers.get(x).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
-                    startTimeOptimistic = System.nanoTime();
-                    return;
+            for(int a=0; a<5; a++){
+                for(int x=0; x<handlers.size(); x++){
+                    chokePreviousOptimisticallyunchokedPeer();
+                    optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
+                    if(handlers.get(x).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                        startTimeOptimistic = System.nanoTime();
+                        return;
+                    }
                 }
             }
             startTimeOptimistic = System.nanoTime();
