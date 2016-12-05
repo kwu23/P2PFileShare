@@ -200,7 +200,7 @@ public class peerProcess {
                                 case 3: handleNotInterestedMessage(); break;                                                                            //not interested
                                 case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
                                 case 6: sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;                         //request
-                                case 7: sendMessageToAll(handlePieceMessage(message)); break;                                            //piece
+                                case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
                                 default: break;
                             }
                             System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
@@ -310,10 +310,11 @@ public class peerProcess {
             return new PieceMessage(fileData[index], index);
         }
 
-        public HaveMessage handlePieceMessage(Message msg){
-            PieceMessage pieceMessage = (PieceMessage) msg;
+        public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-
+            for(int x=0; x<pieceMessage.getPayload().length; x++){
+                System.out.print(pieceMessage.getPayload()[x]);
+            }
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
