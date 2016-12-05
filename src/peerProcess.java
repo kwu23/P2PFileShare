@@ -36,6 +36,11 @@ public class peerProcess {
         peerProcess client = new peerProcess();
         client.run();
     }
+    public static void sendMessageToAll(HaveMessage msg){
+        for(int x=0; x<handlers.size(); x++){
+            handlers.get(x).sendHaveMessage(msg);
+        }
+    }
     public static void optimisticallyUnchokeSomeone(){
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             if(isEveryoneUnchoked()){
@@ -201,10 +206,10 @@ public class peerProcess {
                                 case 3: handleNotInterestedMessage(); break;                                                                            //not interested
                                 case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
                                 case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;           //request
-                                case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;                                   //piece
+                                case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
                                 default: break;
                             }
-                            System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
+                            System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
                         }
                     }
                 } catch (Exception e) {
@@ -335,10 +340,8 @@ public class peerProcess {
                 ioException.printStackTrace();
             }
         }
-        void sendMessageToAll(ArrayList<ObjectOutputStream> connections, Object msg){
-            for(ObjectOutputStream connection : connections){
-                sendMessage(connection, msg);
-            }
+        void sendHaveMessage(Object msg){
+            sendMessage(out, msg);
         }
 
         void randomCheckPrefferedNeighbors() {
