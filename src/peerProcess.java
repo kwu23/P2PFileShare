@@ -19,16 +19,36 @@ public class peerProcess {
     static byte[][] fileData;
     static boolean[] ourBitfield;
     static long unchokeInterval;
+    static long optimisticallyUnchokeInterval;
     static ArrayList<Integer> preferredNeighbors = new ArrayList<>();
     static ArrayList<Neighbor> amountReceived = new ArrayList<>();
     static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
+    static ArrayList<Handler> handlers = new ArrayList<>();
+    static int optimisticallyUnchokedIndex = 0;
+    static boolean isFirst = true;
+    static long startTimeOptimistic = System.nanoTime();
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
         peerProcess.unchokeInterval = CommonCfg.getUnchokingInterval() * (long) 1000000000;
+        peerProcess.optimisticallyUnchokeInterval = CommonCfg.getOptimisticUnchokingInterval() * (long) 1000000000;
         peerID = Integer.parseInt(args[0]);
         peerProcess client = new peerProcess();
         client.run();
+    }
+    public static void optimisticallyUnchokeSomeone(){
+        if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
+            chokePreviousOptimisticallyunchokedPeer();
+            optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
+            handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke();
+            startTimeOptimistic = System.nanoTime();
+        }
+    }
+    public static void chokePreviousOptimisticallyunchokedPeer(){
+        if(isFirst){
+            return;
+        }
+        handlers.get(optimisticallyUnchokedIndex).chokePeer();
     }
     void run() throws IOException {
         try{
@@ -44,11 +64,15 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                new Handler(tempSocket, peers).start();
+                Handler handler = new Handler(tempSocket, peers);
+                handlers.add(handler);
+                handler.start();
             }
             ServerSocket listener = new ServerSocket(me.getListeningPort());
             while(true) {
-                new Handler(listener.accept(), peers).start();
+                Handler handler = new Handler(listener.accept(), peers);
+                handlers.add(handler);
+                handler.start();
             }
         }
         catch (ConnectException e) {
@@ -134,10 +158,12 @@ public class peerProcess {
                     }
                 }
                 try {
-                    long startTime = System.nanoTime();
+                    long startTimeUnchoke = System.nanoTime();
+                    long startTimeOptimisticallyUnchoke = System.nanoTime();
                     while (connect) {
                         // if (hasFile) random unchoke else if...
-                         if(System.nanoTime() - startTime >= unchokeInterval){
+                        optimisticallyUnchokeSomeone();
+                        if(System.nanoTime() - startTimeUnchoke >= unchokeInterval){
                              if (me.hasFile()) {
                                  System.out.println("I hab a file");
                                  randomCheckPrefferedNeighbors();
@@ -145,8 +171,7 @@ public class peerProcess {
                                  System.out.println("I don't hab a file");
                                  checkPreferredNeighbors();
                              }
-
-                            startTime = System.nanoTime();
+                            startTimeUnchoke = System.nanoTime();
                         }
                         try{
                             message = (Message) in.readObject();
@@ -156,13 +181,13 @@ public class peerProcess {
 
                         if(message != null){
                             switch(message.getValue()){
-                                case 0: handleChokeMessage(); break;
-                                case 1: sendMessage(out, handleUnchokeMessage()); break;
-                                case 2: handleInterestedMessage(); break;
-                                case 3: handleNotInterestedMessage(); break;
-                                case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;
-                                case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;
-                                case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;
+                                case 0: handleChokeMessage(); break;                                                                                    //choke
+                                case 1: sendMessage(out, handleUnchokeMessage()); break;                                                                //unchoke
+                                case 2: handleInterestedMessage(); break;                                                                               //interested
+                                case 3: handleNotInterestedMessage(); break;                                                                            //not interested
+                                case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
+                                case 6: if(!isChoked) sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;           //request
+                                case 7: sendMessageToAll(threads, handlePieceMessage((PieceMessage) message)); break;                                   //piece
                                 default: break;
                             }
                             System.out.println("Receive message: \"" + message.getValue() + "\" from client ");
@@ -233,6 +258,7 @@ public class peerProcess {
                 return true;
             }
         }
+
 
         public void handleChokeMessage(){
             System.out.println("We're now choked");
@@ -328,6 +354,15 @@ public class peerProcess {
                     sendMessage(out, new ChokeMessage());
                 }
             }
+        }
+
+        void optimisticallyUnchoke(){
+            sendMessage(out, new UnchokeMessage());
+            System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
+        }
+        void chokePeer(){
+            sendMessage(out, new ChokeMessage());
+            System.out.println("Choke msg sent to " + neighbor.getPeerID());
         }
 
         void checkPreferredNeighbors() {
