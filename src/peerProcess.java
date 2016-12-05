@@ -38,6 +38,9 @@ public class peerProcess {
     }
     public static void optimisticallyUnchokeSomeone(){
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
+            if(isEveryoneUnchoked()){
+                return;
+            }
             chokePreviousOptimisticallyunchokedPeer();
             optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
             if(!handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
@@ -45,6 +48,14 @@ public class peerProcess {
             }
             startTimeOptimistic = System.nanoTime();
         }
+    }
+    public static boolean isEveryoneUnchoked(){
+        for(int x=0; x<handlers.size(); x++){
+            if(handlers.get(x).peerChoked){
+                return false;
+            }
+        }
+        return true;
     }
     public static void chokePreviousOptimisticallyunchokedPeer(){
         if(isFirst){
@@ -107,7 +118,7 @@ public class peerProcess {
         private List<Peer> peers;
         private boolean[] theirBitfield;
         private boolean isChoked = true;        //if we are choked
-        private boolean peerChoked = true;
+        public boolean peerChoked = true;
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
