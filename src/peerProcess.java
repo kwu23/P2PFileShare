@@ -54,6 +54,7 @@ public class peerProcess {
                     return;
                 }
             }
+            startTimeOptimistic = System.nanoTime();
         }
     }
     public static boolean isEveryoneUnchoked(){
