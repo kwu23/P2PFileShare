@@ -46,9 +46,9 @@ public class peerProcess {
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
                     chokePreviousOptimisticallyunchokedPeer();
-                    isFirst=false;
+                    isFirst = false;
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-                    if(handlers.get(optimisticallyUnchokedIndex).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                    if(handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
                         startTimeOptimistic = System.nanoTime();
                         return;
                     }
@@ -312,7 +312,7 @@ public class peerProcess {
 
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            System.out.println("================= " + pieceMessage.getIndex() + " =================");
+            //System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
@@ -322,7 +322,7 @@ public class peerProcess {
                 sendMessage(out, new NotInterestedMessage());
                 areWeInterested = false;
             }
-            System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
+            //System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
             neighbor.receivedPiece();
             if(areWeInterested && !isChoked){
                 sendMessage(out, new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
