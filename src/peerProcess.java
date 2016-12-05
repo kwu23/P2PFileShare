@@ -46,12 +46,14 @@ public class peerProcess {
             if(isEveryoneUnchoked()){
                 return;
             }
-            chokePreviousOptimisticallyunchokedPeer();
-            optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-            if(!handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
-                optimisticallyUnchokeSomeone();
+            for(int x=0; x<handlers.size()*5; x++){
+                chokePreviousOptimisticallyunchokedPeer();
+                optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
+                if(handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                    startTimeOptimistic = System.nanoTime();
+                    return;
+                }
             }
-            startTimeOptimistic = System.nanoTime();
         }
     }
     public static boolean isEveryoneUnchoked(){
