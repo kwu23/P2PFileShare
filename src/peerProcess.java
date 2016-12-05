@@ -376,7 +376,7 @@ public class peerProcess {
         }
 
         boolean optimisticallyUnchoke(){
-            if(peerChoked){
+            if(peerChoked && interested){
                 sendMessage(out, new UnchokeMessage());
                 System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
                 return true;
