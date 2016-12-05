@@ -252,6 +252,7 @@ public class peerProcess {
             if(num < 0 || num >= ones.size()){
                 return 0;
             }
+            System.out.println("================= " + num + " =================");
             return ones.get(num);
         }
 
