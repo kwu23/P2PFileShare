@@ -189,8 +189,7 @@ public class peerProcess {
                         }
                         try{
                             message = (Message) in.readObject();
-                        }catch (Exception e){
-                            e.printStackTrace();
+                        }catch (SocketTimeoutException e){
                             message = null;
                         }
 
