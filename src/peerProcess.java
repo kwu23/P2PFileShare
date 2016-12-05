@@ -46,6 +46,7 @@ public class peerProcess {
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
                     chokePreviousOptimisticallyunchokedPeer();
+                    isFirst=false;
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
                     if(handlers.get(optimisticallyUnchokedIndex).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
                         startTimeOptimistic = System.nanoTime();
@@ -182,7 +183,7 @@ public class peerProcess {
                                  randomCheckPrefferedNeighbors();
                              } else {
                                  //System.out.println("I don't hab a file");
-                                 //checkPreferredNeighbors();
+                                 checkPreferredNeighbors();
                              }
                             startTimeUnchoke = System.nanoTime();
                         }
