@@ -306,15 +306,12 @@ public class peerProcess {
             return bitfield;
         }
         public PieceMessage handleRequestMessage(int index){
-            System.out.println("================= " + index + " =================");
             return new PieceMessage(fileData[index], index);
         }
 
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            for(int x=0; x<pieceMessage.getPayload().length; x++){
-                System.out.print(pieceMessage.getPayload()[x]);
-            }
+            System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
