@@ -40,7 +40,9 @@ public class peerProcess {
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             chokePreviousOptimisticallyunchokedPeer();
             optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-            handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke();
+            if(!handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                optimisticallyUnchokeSomeone();
+            }
             startTimeOptimistic = System.nanoTime();
         }
     }
@@ -104,7 +106,8 @@ public class peerProcess {
         private ObjectOutputStream out;    //stream write to the socket
         private List<Peer> peers;
         private boolean[] theirBitfield;
-        private boolean isChoked = true;
+        private boolean isChoked = true;        //if we are choked
+        private boolean peerChoked = true;
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
@@ -165,10 +168,10 @@ public class peerProcess {
                         optimisticallyUnchokeSomeone();
                         if(System.nanoTime() - startTimeUnchoke >= unchokeInterval){
                              if (me.hasFile()) {
-                                 System.out.println("I hab a file");
+                                 //System.out.println("I hab a file");
                                  randomCheckPrefferedNeighbors();
                              } else {
-                                 System.out.println("I don't hab a file");
+                                 //System.out.println("I don't hab a file");
                                  checkPreferredNeighbors();
                              }
                             startTimeUnchoke = System.nanoTime();
@@ -329,7 +332,7 @@ public class peerProcess {
 
         void randomCheckPrefferedNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
-            System.out.println("k: " + k);
+            //System.out.println("k: " + k);
             int numOfInterestedPeers = 0;
             for (Peer p : peers) {
                 if (!p.hasFile()) {
@@ -343,12 +346,14 @@ public class peerProcess {
             }
             if(Math.random() < (double) k/ (double) numOfInterestedPeers && interested && preferredNeighbors.size() < k) {
                 preferredNeighbors.add(neighbor.getPeerID());
+                peerChoked = false;
                 if(!wasUnchoked){
                     sendMessage(out, new UnchokeMessage());
                     System.out.println("New rand unchoke msg sent to " + neighbor.getPeerID());
                 }
             }else{
                 if(preferredNeighbors.contains(neighbor.getPeerID())){
+                    peerChoked = true;
                     System.out.println("New rand choke msg sent to " + neighbor.getPeerID());
                     preferredNeighbors.remove(preferredNeighbors.indexOf(neighbor.getPeerID()));
                     sendMessage(out, new ChokeMessage());
@@ -356,9 +361,13 @@ public class peerProcess {
             }
         }
 
-        void optimisticallyUnchoke(){
-            sendMessage(out, new UnchokeMessage());
-            System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
+        boolean optimisticallyUnchoke(){
+            if(peerChoked){
+                sendMessage(out, new UnchokeMessage());
+                System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
+                return true;
+            }
+            return false;
         }
         void chokePeer(){
             sendMessage(out, new ChokeMessage());
@@ -379,7 +388,7 @@ public class peerProcess {
                     int index = -1;
 
                     for (Neighbor n : tempNeighbors) {
-                        System.out.println(tempNeighbors.size());
+                        //System.out.println(tempNeighbors.size());
                         if (n.getNumOfPieces() > max) {
                             max = n.getNumOfPieces();
                             index = tempNeighbors.indexOf(n);
