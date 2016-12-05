@@ -9,10 +9,10 @@ public class PieceMessage extends Message{
 	private int index;
     private byte[] payload;
     
-    public PieceMessage(byte[] payload, int index){
+    public PieceMessage(byte[] payload, int num){
     	this.length = payload.length + 5;
     	this.payload = payload;
-    	this.index = index;
+    	this.index = num;
     }
 
     public int getValue(){
@@ -24,7 +24,7 @@ public class PieceMessage extends Message{
 	}
 
 	public int getIndex(){
-		return index;
+		return this.index;
 	}
 
 	public byte[] getPayload() {
