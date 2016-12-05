@@ -47,7 +47,7 @@ public class peerProcess {
                 for(int x=0; x<handlers.size(); x++){
                     chokePreviousOptimisticallyunchokedPeer();
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-                    if(handlers.get(x).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                    if(handlers.get(optimisticallyUnchokedIndex).peerChoked && handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
                         startTimeOptimistic = System.nanoTime();
                         return;
                     }
@@ -349,7 +349,7 @@ public class peerProcess {
                 ioException.printStackTrace();
             }
         }
-        void sendHaveMessage(Object msg){
+        void sendHaveMessage(HaveMessage msg){
             sendMessage(out, msg);
         }
 
