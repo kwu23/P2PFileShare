@@ -182,7 +182,7 @@ public class peerProcess {
                                  randomCheckPrefferedNeighbors();
                              } else {
                                  //System.out.println("I don't hab a file");
-                                 checkPreferredNeighbors();
+                                 //checkPreferredNeighbors();
                              }
                             startTimeUnchoke = System.nanoTime();
                         }
