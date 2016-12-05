@@ -252,7 +252,6 @@ public class peerProcess {
             if(num < 0 || num >= ones.size()){
                 return 0;
             }
-            System.out.println("================= " + num + " =================");
             return ones.get(num);
         }
 
@@ -312,6 +311,7 @@ public class peerProcess {
 
         public HaveMessage handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
+            System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
