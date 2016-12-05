@@ -38,7 +38,7 @@ public class peerProcess {
     }
     public static void sendMessageToAll(HaveMessage msg){
         for(int x=0; x<handlers.size(); x++){
-            handlers.get(x).sendHaveMessage(msg);
+            //handlers.get(x).sendHaveMessage(msg);
         }
     }
     public static void optimisticallyUnchokeSomeone(){
