@@ -38,7 +38,7 @@ public class peerProcess {
     }
     public static void sendMessageToAll(HaveMessage msg){
         for(int x=0; x<handlers.size(); x++){
-            //handlers.get(x).sendHaveMessage(msg);
+            handlers.get(x).sendHaveMessage(msg);
         }
     }
     public static void optimisticallyUnchokeSomeone(){
@@ -327,7 +327,8 @@ public class peerProcess {
             if(areWeInterested && !isChoked){
                 sendMessage(out, new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
             }
-            return new HaveMessage(pieceMessage.getIndex());
+            //return new HaveMessage(pieceMessage.getIndex());
+            return new HaveMessage(1);
         }
 
         public double currentBits(){
