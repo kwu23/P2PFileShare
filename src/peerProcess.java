@@ -327,8 +327,7 @@ public class peerProcess {
             if(areWeInterested && !isChoked){
                 sendMessage(out, new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
             }
-            //return new HaveMessage(pieceMessage.getIndex());
-            return new HaveMessage(1);
+            return new HaveMessage(pieceMessage.getIndex());
         }
 
         public double currentBits(){

@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class NotInterestedMessage extends Message{
+public class NotInterestedMessage extends Message  implements Serializable {
     private int value = 3;
     private int length = 1;
 

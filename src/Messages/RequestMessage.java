@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class RequestMessage extends Message{
+public class RequestMessage extends Message implements Serializable {
     private int value = 6;
     private int length = 5;
     private int payload;

@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class HandshakeMessage extends Message{
+public class HandshakeMessage extends Message implements Serializable {
     private int peerID;
     private String HEADER;
     private String ZEROES;

@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class PieceMessage extends Message{
+public class PieceMessage extends Message  implements Serializable {
     private int value = 7;
     private int length;
 	private int index;

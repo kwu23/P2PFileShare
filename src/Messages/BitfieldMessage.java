@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class BitfieldMessage extends Message{
+public class BitfieldMessage extends Message implements Serializable {
     private int value = 5;
     private int length;
     private boolean[] payload;

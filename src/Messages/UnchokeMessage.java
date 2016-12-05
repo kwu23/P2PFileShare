@@ -1,9 +1,11 @@
 package Messages;
 
+import java.io.Serializable;
+
 /**
  * Created by kevinwu on 10/19/16.
  */
-public class UnchokeMessage extends Message {
+public class UnchokeMessage extends Message  implements Serializable {
     private int value = 1;
     private int length = 1;
 
