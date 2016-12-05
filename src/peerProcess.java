@@ -264,19 +264,19 @@ public class peerProcess {
 
 
         public void handleChokeMessage(){
-            System.out.println("We're now choked by " + peerID);
+            System.out.println("We're now choked by " + neighbor.getPeerID());
             isChoked = true;
         }
 
         public RequestMessage handleUnchokeMessage(){
-            System.out.println("We're now unchoked from " + peerID);
+            System.out.println("We're now unchoked from " + neighbor.getPeerID());
             isChoked = false;
             return new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield)));
         }
 
         public void handleInterestedMessage(){
             interested = true;
-            System.out.println(peerID + " is interested");
+            System.out.println(neighbor.getPeerID() + " is interested");
         }
 
         public void handleNotInterestedMessage(){
