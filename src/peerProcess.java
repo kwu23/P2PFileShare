@@ -376,7 +376,6 @@ public class peerProcess {
         public RequestMessage handleUnchokeMessage(){
             System.out.println("We're now unchoked from " + neighbor.getPeerID());
             isChoked = false;
-            System.out.println("Our last bit is at index: " + ourBitfield.length + " value of " + ourBitfield[ourBitfield.length - 1]);
             return new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield)));
         }
 
@@ -406,7 +405,7 @@ public class peerProcess {
             return new PieceMessage(fileData[index], index);
         }
 
-        public int handlePieceMessage(PieceMessage pieceMessage){
+        public int handlePieceMessage(PieceMessage pieceMessage) throws IOException{
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
             System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
@@ -420,15 +419,10 @@ public class peerProcess {
             }
             System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
 
-            int missing = ourBitfield.length;
-            for (int i = 0; i < ourBitfield.length; i++) {
-                if (ourBitfield[i] == true) {
-                    missing--;
+            if (currentBits() / (double) ourBitfield.length * (double) 100 == 100.0) {
+                for (int i = 0; i < fileData.length; i++) {
+                    Utilities.turnBytesToFile(fileData[i]);
                 }
-                if (ourBitfield[i] == false) {
-                    System.out.println("Missing at index: " + i);
-                }
-
 
             }
 
