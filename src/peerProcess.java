@@ -428,7 +428,7 @@ public class peerProcess {
             double percentDone = currentBits() / (double) ourBitfield.length * (double) 100;
             System.out.println(percentDone + "% done");
 
-            if (percentDone == 100.0 && !isWritingFile) {
+            if (currentBits() == ourBitfield.length && !isWritingFile) {
                 isWritingFile = true;
                 for (int i = 0; i < fileData.length; i++) {
                     Utilities.turnBytesToFile(fileData[i]);
