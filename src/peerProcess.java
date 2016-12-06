@@ -204,7 +204,6 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
-        private boolean isFirst = true;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
@@ -219,120 +218,99 @@ public class peerProcess {
         }
 
         public void run() {
-            while(true) {
+            try {
+                //initialize Input and Output streams
+                if(out == null){
+                    out = new ObjectOutputStream(connection.getOutputStream());
+                    out.flush();
+                }
+                if(in == null){
+                    in = new ObjectInputStream(connection.getInputStream());
+                }
+                connection.setSoTimeout(5000);
+                HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
+                sendMessage(out, handshakeMessage);
+                System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
+                handshakeMessage = (HandshakeMessage) in.readObject();
+
+                //show the message to the user
+                System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
+                if(!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)){
+                    connect = false;
+                    sendMessage(out, "Disconnecting due to invalid handshake");
+                    System.out.println("Disconnect with Client due to invalid handshake");
+                }
+                if(connect){
+                    sendMessage(out, "Connection successful!");
+                    int connectedPeerId = handshakeMessage.getPeerID();
+                    neighbor = new Neighbor(connectedPeerId);
+                    amountReceived.add(neighbor);
+                }
+
+                String handshakeVerification = (String) in.readObject();
+                System.out.println(handshakeVerification);
+                if(!handshakeVerification.equals("Connection successful!")){
+                    connect = false;
+                }
+                if(connect){
+                    sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
+                    theirBitfield = bitfieldMessage.getPayload();
+                    if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
+                        sendMessage(out, new InterestedMessage());
+                        System.out.println("Sending out interested msg to " + neighbor.getPeerID());
+                        areWeInterested = true;
+                    }
+                }
                 try {
-                    if(isFirst) {
-                        //initialize Input and Output streams
-                        if (out == null) {
-                            out = new ObjectOutputStream(connection.getOutputStream());
-                            out.flush();
-                        }
-                        if (in == null) {
-                            in = new ObjectInputStream(connection.getInputStream());
-                        }
-                        connection.setSoTimeout(5000);
-                        HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
-                        sendMessage(out, handshakeMessage);
-                        System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
-                        handshakeMessage = (HandshakeMessage) in.readObject();
-
-                        //show the message to the user
-                        System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
-                        if (!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)) {
-                            connect = false;
-                            sendMessage(out, "Disconnecting due to invalid handshake");
-                            System.out.println("Disconnect with Client due to invalid handshake");
-                        }
-                        if (connect) {
-                            sendMessage(out, "Connection successful!");
-                            int connectedPeerId = handshakeMessage.getPeerID();
-                            neighbor = new Neighbor(connectedPeerId);
-                            amountReceived.add(neighbor);
+                    while (connect) {
+                        // if (hasFile) random unchoke else if...
+                        optimisticallyUnchokeSomeone();
+                         if (me.hasFile()) {
+                             //System.out.println("I hab a file");
+                             randomCheckPreferredNeighbors();
+                         } else {
+                             //System.out.println("I don't hab a file");
+                             checkPreferredNeighbors();
+                         }
+                        try{
+                            message = (Message) in.readObject();
+                        }catch (SocketTimeoutException e){
+                            System.out.print("=============" + connection.isConnected() + "=============");
+                            message = null;
                         }
 
-                        String handshakeVerification = (String) in.readObject();
-                        System.out.println(handshakeVerification);
-                        if (!handshakeVerification.equals("Connection successful!")) {
-                            connect = false;
-                        }
-                        if (connect) {
-                            sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
-                            BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
-                            theirBitfield = bitfieldMessage.getPayload();
-                            if (interestedCheck(and(not(ourBitfield), theirBitfield))) {
-                                sendMessage(out, new InterestedMessage());
-                                System.out.println("Sending out interested msg to " + neighbor.getPeerID());
-                                areWeInterested = true;
+                        if(message != null){
+                            switch(message.getValue()){
+                                case 0: handleChokeMessage(); break;                                                                                    //choke
+                                case 1: sendMessage(out, handleUnchokeMessage()); break;                                                                //unchoke
+                                case 2: handleInterestedMessage(); break;                                                                               //interested
+                                case 3: handleNotInterestedMessage(); break;                                                                            //not interested
+                                case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
+                                case 6: sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;                         //request
+                                case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
+                                default: break;
                             }
+                            System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
                         }
-                        isFirst = false;
                     }
-                    try {
-                        while (connect) {
-                            // if (hasFile) random unchoke else if...
-                            optimisticallyUnchokeSomeone();
-                            if (me.hasFile()) {
-                                //System.out.println("I hab a file");
-                                randomCheckPreferredNeighbors();
-                            } else {
-                                //System.out.println("I don't hab a file");
-                                checkPreferredNeighbors();
-                            }
-                            try {
-                                message = (Message) in.readObject();
-                            } catch (SocketTimeoutException e) {
-                                System.out.print("=============" + connection.isConnected() + "=============");
-                                message = null;
-                            }
-
-                            if (message != null) {
-                                switch (message.getValue()) {
-                                    case 0:
-                                        handleChokeMessage();
-                                        break;                                                                                    //choke
-                                    case 1:
-                                        sendMessage(out, handleUnchokeMessage());
-                                        break;                                                                //unchoke
-                                    case 2:
-                                        handleInterestedMessage();
-                                        break;                                                                               //interested
-                                    case 3:
-                                        handleNotInterestedMessage();
-                                        break;                                                                            //not interested
-                                    case 4:
-                                        theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload());
-                                        break;                  //have
-                                    case 6:
-                                        sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload()));
-                                        break;                         //request
-                                    case 7:
-                                        sendMessageToAll(handlePieceMessage((PieceMessage) message));
-                                        break;                                            //piece
-                                    default:
-                                        break;
-                                }
-                                System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException ioException) {
-                    System.out.println("Disconnect with Client");
-                } catch (ClassNotFoundException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                } /*finally {
+                }
+            } catch (IOException ioException) {
+                System.out.println("Disconnect with Client");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
                 //Close connections
                 try {
-                    System.out.println("====== HERE ======");
                     in.close();
                     out.close();
                     connection.close();
                 } catch (IOException ioException) {
                     System.out.println("Disconnect with Client ");
                 }
-            }*/
             }
         }
 
