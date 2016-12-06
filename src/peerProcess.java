@@ -228,7 +228,6 @@ public class peerProcess {
                     in = new ObjectInputStream(connection.getInputStream());
                 }
                 connection.setSoTimeout(5000);
-                connection.setKeepAlive(true);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
@@ -278,8 +277,7 @@ public class peerProcess {
                         try{
                             message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
-                            System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
-                            //connection = new Socket();
+                            System.out.print("=============" + connection.isConnected() + "=============");
                             message = null;
                         }
 
@@ -294,7 +292,7 @@ public class peerProcess {
                                 case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
                                 default: break;
                             }
-                            //System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
+                            System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
                         }
                     }
                 } catch (Exception e) {
@@ -402,7 +400,7 @@ public class peerProcess {
 
         public int handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            //System.out.println("================= " + pieceMessage.getIndex() + " =================");
+            System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
