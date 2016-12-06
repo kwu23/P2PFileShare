@@ -32,6 +32,7 @@ public class peerProcess {
     static long startTimeOptimistic = System.nanoTime();
     static long startTimeUnchoking = System.nanoTime();
     static Logger logger;
+    static int peersCompleted;
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
@@ -168,6 +169,7 @@ public class peerProcess {
             fh.setFormatter(formatter);
             logger.info("Log established at " + LocalDateTime.now());
 
+            int count = 0;
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
@@ -182,6 +184,12 @@ public class peerProcess {
 
                     break;
                 }
+
+                if (peer.hasFile()) {
+                    peersCompleted[count] = true;
+                }
+
+                count++;
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
                 logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " makes a connection to Peer " + peer.getPeerID());
@@ -292,10 +300,7 @@ public class peerProcess {
                 }
                 try {
                     while (connect) {
-
-                        // Check if all peers have file, if so, then terminate
-                        checkOtherPeersCompletion();
-
+                        checkTerminationStatus();
                         // if (hasFile) random unchoke else if...
                         //optimisticallyUnchokeSomeone();
                          if (me.hasFile()) {
@@ -433,6 +438,8 @@ public class peerProcess {
         public boolean[] handleHaveMessage(boolean[] bitfield, int index){
             bitfield[index] = true;
 
+            checkOtherPeersCompletion(bitfield);
+
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(new InterestedMessage());
                 areWeInterested = true;
@@ -475,9 +482,6 @@ public class peerProcess {
                 }
 
                 me.setHasFile(true);
-
-                checkOtherPeersCompletion();
-
                 logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the complete file.");
 
             }
@@ -539,23 +543,28 @@ public class peerProcess {
             System.out.println("Choke msg sent to " + neighbor.getPeerID());
         }
 
-        void checkOtherPeersCompletion() {
-            for (Peer p : peers) {
-                if (!p.hasFile()) {
+        void checkOtherPeersCompletion(boolean[] bf) {
+            for (boolean b: bf) {
+                if (!b) {
                     return;
                 }
             }
+            peersCompleted++;
+            System.out.println("Peers completed");
+        }
 
-            try {
-                in.close();
-                out.close();
-                connection.close();
+        void checkTerminationStatus() {
+            if (peersCompleted >= peers.size()) {
+                try {
+                    in.close();
+                    out.close();
+                    connection.close();
 
-                System.exit(0);
-            } catch (IOException ioException) {
-                System.out.println("Disconnect with Client ");
+                    System.exit(0);
+                } catch (IOException ioException) {
+                    System.out.println("Disconnect with Client ");
+                }
             }
-
         }
 
         /*
