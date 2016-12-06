@@ -229,7 +229,7 @@ public class peerProcess {
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
-                handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF().getBytes());
+                handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF());
                 System.out.println("=======" + handshakeMessage.getMessage() + "=======");
 
                 //show the message to the user
@@ -245,14 +245,14 @@ public class peerProcess {
                     neighbor = new Neighbor(connectedPeerId);
                     amountReceived.add(neighbor);
                 }
-                String handshakeVerification = (String) Serializer.deserialize(in.readUTF().getBytes());
+                String handshakeVerification = (String) Serializer.deserialize(in.readUTF());
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
                 if(connect){
                     sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
-                    BitfieldMessage bitfieldMessage = (BitfieldMessage) Serializer.deserialize(in.readUTF().getBytes());
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) Serializer.deserialize(in.readUTF());
                     theirBitfield = bitfieldMessage.getPayload();
                     if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
                         sendMessage(out, new InterestedMessage());
@@ -272,7 +272,7 @@ public class peerProcess {
                              checkPreferredNeighbors();
                          }
                         try{
-                            message = (Message) Serializer.deserialize(in.readUTF().getBytes());
+                            message = (Message) Serializer.deserialize(in.readUTF());
                         }catch (SocketTimeoutException e){
                             message = null;
                         }
@@ -427,7 +427,7 @@ public class peerProcess {
         void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
-                out.writeObject(new String(Serializer.serialize(msg)));
+                out.writeObject(Serializer.serialize(msg));
                 out.flush();
             }
             catch(IOException ioException){
@@ -448,6 +448,7 @@ public class peerProcess {
             }
             return false;
         }
+
         void chokePeer(){
             sendMessage(out, new ChokeMessage());
             System.out.println("Choke msg sent to " + neighbor.getPeerID());
