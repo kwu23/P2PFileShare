@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by kevinwu on 10/19/16.
@@ -166,7 +167,11 @@ public class peerProcess {
                     }
 
                     Logger logger = Logger.getLogger(peerProcess.class.getName());
-                    FileHandler fh = new FileHandler("../log_peer_" + peerID + ".log");
+                    FileHandler fh = new FileHandler("log_peer_" + peerID + ".log");
+                    logger.addHandler(fh);
+                    SimpleFormatter formatter = new SimpleFormatter();
+                    fh.setFormatter(formatter);
+                    
                     logger.info("Log established at " + new Date());
 
                     break;
