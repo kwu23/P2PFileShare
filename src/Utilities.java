@@ -3,6 +3,7 @@ import Messages.HandshakeMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class Utilities {
     }
 
     public static void turnBytesToFile(byte[] bytes) throws IOException{
-        FileOutputStream stream = new FileOutputStream(CommonCfg.getFileName());
+         FileOutputStream stream = new FileOutputStream(CommonCfg.getFileName(), true);
         try {
             stream.write(bytes);
         } finally {
