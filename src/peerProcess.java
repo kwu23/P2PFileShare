@@ -477,7 +477,7 @@ public class peerProcess {
                     Utilities.turnBytesToFile(fileData[i]);
                 }
                 peersCompleted++;
-                checkOtherPeersCompletion(theirBitfield);
+                //checkOtherPeersCompletion(theirBitfield);
 
                 me.setHasFile(true);
                 logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the complete file.");
