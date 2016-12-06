@@ -550,6 +550,8 @@ public class peerProcess {
                 in.close();
                 out.close();
                 connection.close();
+
+                System.exit(0);
             } catch (IOException ioException) {
                 System.out.println("Disconnect with Client ");
             }
