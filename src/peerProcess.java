@@ -80,8 +80,12 @@ public class peerProcess {
             for (int x = 0; x < preferredNeighbors.size(); x++) {
                 if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
                     preferredNeighbors.remove(x).chokePeer();
-                } else {
-                    preferredNeighbors.get(x).unchoke();
+                }
+            }
+            for(int x=0; x<neighborsToUnchoke.size(); x++){
+                neighborsToUnchoke.get(x).unchoke();
+                if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
+                    preferredNeighbors.add(neighborsToUnchoke.get(x));
                 }
             }
             for(int x = 0; x < handlers.size(); x++){
@@ -97,24 +101,26 @@ public class peerProcess {
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
             if (handlers.size() <= k) {
                 for (int x = 0; x < handlers.size(); x++) {
-                    if (!preferredNeighbors.contains(handlers.get(x))) {
-                        handlers.get(x).unchoke();
-                        preferredNeighbors.add(handlers.get(x));
-                    }
-                }
-            }
-            for (int x = 0; x < k; ) {
-                int randomPeer = (int) (Math.random() * handlers.size());
-                if (handlers.get(randomPeer).isInterestedIn()) {
                     neighborsToUnchoke.add(handlers.get(x));
-                    x++;
+                }
+            }else{
+                for (int x = 0; x < k; ) {
+                    int randomPeer = (int) (Math.random() * handlers.size());
+                    if (handlers.get(randomPeer).isInterestedIn()) {
+                        neighborsToUnchoke.add(handlers.get(x));
+                        x++;
+                    }
                 }
             }
             for (int x = 0; x < preferredNeighbors.size(); x++) {
                 if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
                     preferredNeighbors.remove(x).chokePeer();
-                } else {
-                    preferredNeighbors.get(x).unchoke();
+                }
+            }
+            for(int x=0; x<neighborsToUnchoke.size(); x++){
+                neighborsToUnchoke.get(x).unchoke();
+                if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
+                    preferredNeighbors.add(neighborsToUnchoke.get(x));
                 }
             }
             startTimeUnchoking = System.nanoTime();
