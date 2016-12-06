@@ -423,12 +423,10 @@ public class peerProcess {
                 if (ourBitfield[i] == true) {
                     missing--;
                 }
-
-                if (missing < 3) {
-                    if (ourBitfield[i] == false) {
-                        System.out.println("Missing at index: " + i);
-                    }
+                if (ourBitfield[i] == false) {
+                    System.out.println("Missing at index: " + i);
                 }
+
 
             }
 
