@@ -279,8 +279,7 @@ public class peerProcess {
                          }
                         try{
                             message = (Message) in.readObject();
-                        }catch (Exception e){
-                            System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
+                        }catch (SocketTimeoutException e){
                             message = null;
                         }
 
