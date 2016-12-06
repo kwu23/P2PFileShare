@@ -224,6 +224,8 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
+                in.close();
+                in = new ObjectInputStream(connection.getInputStream());
                 connection.setSoTimeout(5000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
@@ -274,9 +276,6 @@ public class peerProcess {
                         try{
                             message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
-                            out = new ObjectOutputStream(connection.getOutputStream());
-                            out.flush();
-                            in = new ObjectInputStream(connection.getInputStream());
                             message = null;
                         }
 
