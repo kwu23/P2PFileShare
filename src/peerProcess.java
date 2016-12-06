@@ -292,6 +292,10 @@ public class peerProcess {
                 }
                 try {
                     while (connect) {
+
+                        // Check if all peers have file, if so, then terminate
+                        checkOtherPeersCompletion();
+
                         // if (hasFile) random unchoke else if...
                         //optimisticallyUnchokeSomeone();
                          if (me.hasFile()) {
@@ -308,7 +312,7 @@ public class peerProcess {
                             }
 
                         }catch (SocketTimeoutException e){
-                            System.out.print("Waiting on peers...");
+                            System.out.println("Waiting on peers...");
                             message = null;
                         }
 
@@ -470,6 +474,10 @@ public class peerProcess {
                     Utilities.turnBytesToFile(fileData[i]);
                 }
 
+                me.setHasFile(true);
+
+                checkOtherPeersCompletion();
+
                 logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the complete file.");
 
             }
@@ -529,6 +537,23 @@ public class peerProcess {
         void chokePeer(){
             sendMessage(new ChokeMessage());
             System.out.println("Choke msg sent to " + neighbor.getPeerID());
+        }
+
+        void checkOtherPeersCompletion() {
+            for (Peer p : peers) {
+                if (!p.hasFile()) {
+                    return;
+                }
+            }
+
+            try {
+                in.close();
+                out.close();
+                connection.close();
+            } catch (IOException ioException) {
+                System.out.println("Disconnect with Client ");
+            }
+
         }
 
         /*

@@ -28,4 +28,8 @@ public class Peer {
     public boolean hasFile(){
         return hasFile;
     }
+
+    public void setHasFile(boolean boo) {
+        hasFile = boo;
+    }
 }
