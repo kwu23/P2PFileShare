@@ -315,7 +315,6 @@ public class peerProcess {
                         }catch (SocketTimeoutException e){
                             System.out.println("Waiting on peers...");
                             message = null;
-                            System.exit(0);
                         }
 
                         if(message != null){
@@ -333,7 +332,7 @@ public class peerProcess {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.exit(0);
                 }
             } catch (IOException ioException) {
                 System.out.println("Disconnect with Client");
