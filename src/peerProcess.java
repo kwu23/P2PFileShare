@@ -65,7 +65,9 @@ public class peerProcess {
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
             ArrayList<Integer> numPieces = new ArrayList<>();
             for (int x = 0; x < handlers.size(); x++) {
-                numPieces.add(handlers.get(x).getNeighbor().getNumOfPieces());
+                if(handlers.get(x) != null && handlers.get(x).getNeighbor() != null){
+                    numPieces.add(handlers.get(x).getNeighbor().getNumOfPieces());
+                }
             }
             for (int x = 0; x < numPieces.size(); x++) {
                 int max = numPieces.indexOf(Collections.max(numPieces));
@@ -94,7 +96,9 @@ public class peerProcess {
                 }
             }
             for(int x = 0; x < handlers.size(); x++){
-                handlers.get(x).getNeighbor().resetPieces();
+                if(handlers.get(x) != null && handlers.get(x).getNeighbor() != null){
+                    handlers.get(x).getNeighbor().resetPieces();
+                }
             }
             startTimeUnchoking = System.nanoTime();
         }
@@ -393,7 +397,7 @@ public class peerProcess {
 
         public int handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            //System.out.println("================= " + pieceMessage.getIndex() + " =================");
+            System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
