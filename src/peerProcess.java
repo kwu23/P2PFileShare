@@ -343,7 +343,7 @@ public class peerProcess {
                 }
             }
 
-            int num = ((int)((Math.random())*ones.size())-1);
+            int num = ((int)((Math.random())*ones.size()));
             if(num < 0 || num >= ones.size()){
                 return 0;
             }
@@ -376,6 +376,7 @@ public class peerProcess {
         public RequestMessage handleUnchokeMessage(){
             System.out.println("We're now unchoked from " + neighbor.getPeerID());
             isChoked = false;
+            System.out.println("Our last bit is at index: " + ourBitfield.length + " value of " + ourBitfield[ourBitfield.length - 1]);
             return new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield)));
         }
 
