@@ -418,15 +418,16 @@ public class peerProcess {
             }
             System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
 
-            int missing = -ourBitfield.length;
+            int missing = ourBitfield.length;
             for (int i = 0; i < ourBitfield.length; i++) {
                 if (ourBitfield[i] == true) {
                     missing--;
-                    if (missing < 3) {
-                        System.out.println("Missing at index: " + i);
-                    }
-
                 }
+
+                if (missing < 3) {
+                    System.out.println("Missing at index: " + i);
+                }
+
             }
 
             neighbor.receivedPiece();
