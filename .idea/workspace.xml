@@ -35,12 +35,12 @@
                 <element signature="e#9042#9043#0" expanded="true" />
                 <element signature="e#9083#9084#0" expanded="true" />
                 <element signature="e#9124#9125#0" expanded="true" />
-                <element signature="e#16926#16927#0" expanded="true" />
-                <element signature="e#16968#16969#0" expanded="true" />
-                <element signature="e#19356#19357#0" expanded="true" />
-                <element signature="e#19420#19421#0" expanded="true" />
-                <marker date="1481048354000" expanded="false" signature="17599:17613" ph=" { " />
-                <marker date="1481048354000" expanded="false" signature="17661:17671" ph=" }" />
+                <element signature="e#16712#16713#0" expanded="true" />
+                <element signature="e#16754#16755#0" expanded="true" />
+                <element signature="e#19142#19143#0" expanded="true" />
+                <element signature="e#19206#19207#0" expanded="true" />
+                <marker date="1481048392000" expanded="false" signature="17385:17399" ph=" { " />
+                <marker date="1481048392000" expanded="false" signature="17447:17457" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -792,12 +792,12 @@
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
       <workItem from="1479053673291" duration="14573000" />
-      <workItem from="1480704615886" duration="27882000" />
+      <workItem from="1480704615886" duration="27920000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65704000" />
+    <option name="totallyTimeSpent" value="65742000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="953" extended-state="6" />
@@ -1004,12 +1004,12 @@
             <element signature="e#9042#9043#0" expanded="true" />
             <element signature="e#9083#9084#0" expanded="true" />
             <element signature="e#9124#9125#0" expanded="true" />
-            <element signature="e#16926#16927#0" expanded="true" />
-            <element signature="e#16968#16969#0" expanded="true" />
-            <element signature="e#19356#19357#0" expanded="true" />
-            <element signature="e#19420#19421#0" expanded="true" />
-            <marker date="1481048354000" expanded="false" signature="17599:17613" ph=" { " />
-            <marker date="1481048354000" expanded="false" signature="17661:17671" ph=" }" />
+            <element signature="e#16712#16713#0" expanded="true" />
+            <element signature="e#16754#16755#0" expanded="true" />
+            <element signature="e#19142#19143#0" expanded="true" />
+            <element signature="e#19206#19207#0" expanded="true" />
+            <marker date="1481048392000" expanded="false" signature="17385:17399" ph=" { " />
+            <marker date="1481048392000" expanded="false" signature="17447:17457" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1302,12 +1302,12 @@
             <element signature="e#9042#9043#0" expanded="true" />
             <element signature="e#9083#9084#0" expanded="true" />
             <element signature="e#9124#9125#0" expanded="true" />
-            <element signature="e#16926#16927#0" expanded="true" />
-            <element signature="e#16968#16969#0" expanded="true" />
-            <element signature="e#19356#19357#0" expanded="true" />
-            <element signature="e#19420#19421#0" expanded="true" />
-            <marker date="1481048354000" expanded="false" signature="17599:17613" ph=" { " />
-            <marker date="1481048354000" expanded="false" signature="17661:17671" ph=" }" />
+            <element signature="e#16712#16713#0" expanded="true" />
+            <element signature="e#16754#16755#0" expanded="true" />
+            <element signature="e#19142#19143#0" expanded="true" />
+            <element signature="e#19206#19207#0" expanded="true" />
+            <marker date="1481048392000" expanded="false" signature="17385:17399" ph=" { " />
+            <marker date="1481048392000" expanded="false" signature="17447:17457" ph=" }" />
           </folding>
         </state>
       </provider>
