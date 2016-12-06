@@ -427,7 +427,7 @@ public class peerProcess {
         void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
-                out.writeObject(Serializer.serialize(msg).toString());
+                out.writeObject(new String(Serializer.serialize(msg)));
                 out.flush();
             }
             catch(IOException ioException){
