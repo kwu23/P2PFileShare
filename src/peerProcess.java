@@ -156,6 +156,14 @@ public class peerProcess {
         try{
             peers = Utilities.readCfg("PeerInfo.cfg");
             connections = new ArrayList<>();
+
+            logger = Logger.getLogger(peerProcess.class.getName());
+            FileHandler fh = new FileHandler("log_peer_" + peerID + ".log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+            logger.info("Log established at " + date.getTime());
+
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
                     me = peer;
@@ -167,14 +175,6 @@ public class peerProcess {
                         FileOutputStream out = new FileOutputStream(CommonCfg.getFileName());
                         out.close();
                     }
-
-                    logger = Logger.getLogger(peerProcess.class.getName());
-                    FileHandler fh = new FileHandler("log_peer_" + peerID + ".log");
-                    logger.addHandler(fh);
-                    SimpleFormatter formatter = new SimpleFormatter();
-                    fh.setFormatter(formatter);
-
-                    logger.info("Log established at " + date.getTime());
 
                     break;
                 }
