@@ -4,7 +4,10 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 /**
  * Created by kevinwu on 10/19/16.
@@ -162,6 +165,10 @@ public class peerProcess {
                         out.close();
                     }
 
+                    Logger logger = Logger.getLogger(peerProcess.class.getName());
+                    FileHandler fh = new FileHandler("../log_peer_" + peerID + ".log");
+                    logger.info("Log established at " + new Date());
+
                     break;
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
@@ -289,7 +296,7 @@ public class peerProcess {
                             }
 
                         }catch (SocketTimeoutException e){
-                            System.out.print("=============" + connection.isConnected() + "=============");
+                            System.out.print("Waiting on peers...");
                             message = null;
                         }
 
