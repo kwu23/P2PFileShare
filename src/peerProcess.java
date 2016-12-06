@@ -229,7 +229,7 @@ public class peerProcess {
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
-                handshakeMessage = (HandshakeMessage) in.readObject();
+                handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF().getBytes());
 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
@@ -244,15 +244,14 @@ public class peerProcess {
                     neighbor = new Neighbor(connectedPeerId);
                     amountReceived.add(neighbor);
                 }
-
-                String handshakeVerification = (String) in.readObject();
+                String handshakeVerification = (String) Serializer.deserialize(in.readUTF().getBytes());
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
                 if(connect){
                     sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
-                    BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) Serializer.deserialize(in.readUTF().getBytes());
                     theirBitfield = bitfieldMessage.getPayload();
                     if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
                         sendMessage(out, new InterestedMessage());
@@ -272,7 +271,7 @@ public class peerProcess {
                              checkPreferredNeighbors();
                          }
                         try{
-                            message = (Message) in.readObject();
+                            message = (Message) Serializer.deserialize(in.readUTF().getBytes());
                         }catch (SocketTimeoutException e){
                             message = null;
                         }
@@ -427,7 +426,7 @@ public class peerProcess {
         void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
-                out.writeObject(msg);
+                out.writeObject(Serializer.serialize(msg).toString());
                 out.flush();
             }
             catch(IOException ioException){
