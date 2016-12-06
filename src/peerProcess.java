@@ -44,7 +44,7 @@ public class peerProcess {
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
-                    chokePreviousOptimisticallyunchokedPeer();
+                    //chokePreviousOptimisticallyunchokedPeer();
                     isFirst = false;
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
                     if(handlers.get(optimisticallyUnchokedIndex).unchoke()){
