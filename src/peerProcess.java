@@ -37,7 +37,7 @@ public class peerProcess {
     }
     public static void sendMessageToAll(int msg){
         for(int x=0; x<handlers.size(); x++){
-            //handlers.get(x).sendHaveMessage(msg);
+            handlers.get(x).sendHaveMessage(msg);
         }
     }
     public static void optimisticallyUnchokeSomeone(){
@@ -289,7 +289,7 @@ public class peerProcess {
                                 case 3: handleNotInterestedMessage(); break;                                                                            //not interested
                                 case 4: theirBitfield = handleHaveMessage(theirBitfield, ((HaveMessage) message).getPayload()); break;                  //have
                                 case 6: sendMessage(out, handleRequestMessage(((RequestMessage) message).getPayload())); break;                         //request
-                                case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
+                                case 7: PieceMessage tempPiece = (PieceMessage) message; sendMessageToAll(tempPiece.getIndex()); handlePieceMessage(tempPiece); break;                                            //piece
                                 default: break;
                             }
                             System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
