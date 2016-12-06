@@ -417,6 +417,13 @@ public class peerProcess {
                 areWeInterested = false;
             }
             System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
+
+            for (int i = 0; i < ourBitfield.length; i++) {
+                System.out.print(ourBitfield[i]);
+            }
+
+            System.out.println();
+
             neighbor.receivedPiece();
             if(areWeInterested && !isChoked){
                 sendMessage(new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
