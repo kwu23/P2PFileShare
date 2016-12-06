@@ -308,7 +308,7 @@ public class peerProcess {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
-                System.out.println("==============" + message.getClass().getName() + "==============");
+                //System.out.println("==============" + message.getClass().getName() + "==============");
                 //Close connections
                 try {
                     in.close();
@@ -436,6 +436,9 @@ public class peerProcess {
 
         void sendMessage(Object msg)
         {
+            if(msg == null){
+                return;
+            }
             try{
                 out.writeObject(msg);
                 out.flush();
