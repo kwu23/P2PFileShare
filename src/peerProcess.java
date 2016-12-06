@@ -59,7 +59,7 @@ public class peerProcess {
     }
 
     public static void checkPreferredNeighbors(){
-        if(System.nanoTime() - startTimeOptimistic >= startTimeUnchoking) {
+        if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             int currentNeighbors = 0;
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
@@ -78,10 +78,14 @@ public class peerProcess {
                     break;
                 }
             }
+            ArrayList<Integer> indexesToRemove = new ArrayList<>();
             for (int x = 0; x < preferredNeighbors.size(); x++) {
                 if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
-                    preferredNeighbors.remove(x).chokePeer();
+                    indexesToRemove.add(x);
                 }
+            }
+            for(int x=0; x<indexesToRemove.size(); x++){
+                preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
@@ -97,7 +101,7 @@ public class peerProcess {
     }
 
     public static void randomCheckPreferredNeighbors(){
-        if(System.nanoTime() - startTimeOptimistic >= startTimeUnchoking) {
+        if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
             if (handlers.size() <= k) {
@@ -113,10 +117,14 @@ public class peerProcess {
                     }
                 }
             }
+            ArrayList<Integer> indexesToRemove = new ArrayList<>();
             for (int x = 0; x < preferredNeighbors.size(); x++) {
                 if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
-                    preferredNeighbors.remove(x).chokePeer();
+                    indexesToRemove.add(x);
                 }
+            }
+            for(int x=0; x<indexesToRemove.size(); x++){
+                preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
