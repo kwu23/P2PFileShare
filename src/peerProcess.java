@@ -220,10 +220,13 @@ public class peerProcess {
         public void run() {
             try {
                 //initialize Input and Output streams
-
-                out = new ObjectOutputStream(connection.getOutputStream());
-                out.flush();
-                in = new ObjectInputStream(connection.getInputStream());
+                if(out == null){
+                    out = new ObjectOutputStream(connection.getOutputStream());
+                    out.flush();
+                }
+                if(in == null){
+                    in = new ObjectInputStream(connection.getInputStream());
+                }
                 connection.setSoTimeout(5000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
