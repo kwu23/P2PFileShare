@@ -281,7 +281,9 @@ public class peerProcess {
                             message = (Message) in.readObject();
                         }catch (Exception e){
                             System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
-                            connection.close();
+                            out = new ObjectOutputStream(connection.getOutputStream());
+                            out.flush();
+                            in = new ObjectInputStream(connection.getInputStream());
                             connection.connect(address);
                             message = null;
                         }
