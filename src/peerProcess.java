@@ -204,12 +204,10 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
-        private SocketAddress address;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
             this.peers = peers;
-            address = connection.getRemoteSocketAddress();
         }
 
         public Neighbor getNeighbor(){
@@ -280,6 +278,8 @@ public class peerProcess {
                         try{
                             message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
+                            System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
+                            //connection = new Socket();
                             message = null;
                         }
 
