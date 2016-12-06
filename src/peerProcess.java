@@ -2,6 +2,7 @@ import Messages.*;
 
 import java.io.*;
 import java.net.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,7 +31,6 @@ public class peerProcess {
     static boolean isFirst = true;
     static long startTimeOptimistic = System.nanoTime();
     static long startTimeUnchoking = System.nanoTime();
-    static Date date = new Date();
     static Logger logger;
 
     public static void main(String[] args) throws IOException {
@@ -95,10 +95,13 @@ public class peerProcess {
             for(int x=0; x<indexesToRemove.size(); x++){
                 preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the preferred neighbor ");
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
                 if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
                     preferredNeighbors.add(neighborsToUnchoke.get(x));
+                    logger.info(neighborsToUnchoke.get(x).getNeighbor().getPeerID() + " ");
                 }
             }
             for(int x = 0; x < handlers.size(); x++){
@@ -136,10 +139,13 @@ public class peerProcess {
             for(int x=0; x<indexesToRemove.size(); x++){
                 preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the preferred neighbor ");
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
                 if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
                     preferredNeighbors.add(neighborsToUnchoke.get(x));
+                    logger.info(neighborsToUnchoke.get(x).getNeighbor().getPeerID() + " ");
                 }
             }
             startTimeUnchoking = System.nanoTime();
@@ -162,7 +168,7 @@ public class peerProcess {
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            logger.info("Log established at " + date.getTime());
+            logger.info("Log established at " + LocalDateTime.now());
 
             for(Peer peer : peers){
                 if(peer.getPeerID() == peerID){
@@ -180,7 +186,7 @@ public class peerProcess {
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
-                logger.info(date.getTime() + ": Peer " + peerID + " makes a connection to Peer " + peer.getPeerID());
+                logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " makes a connection to Peer " + peer.getPeerID());
                 Handler handler = new Handler(tempSocket, peers);
                 handlers.add(handler);
                 handler.start();
