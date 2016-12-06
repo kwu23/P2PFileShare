@@ -204,10 +204,12 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
+        private SocketAddress address;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
             this.peers = peers;
+            address = connection.getRemoteSocketAddress();
         }
 
         public Neighbor getNeighbor(){
@@ -277,9 +279,9 @@ public class peerProcess {
                          }
                         try{
                             message = (Message) in.readObject();
-                        }catch (SocketTimeoutException e){
+                        }catch (Exception e){
                             System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
-                            //connection = new Socket();
+                            connection.connect(address);
                             message = null;
                         }
 
@@ -294,7 +296,7 @@ public class peerProcess {
                                 case 7: sendMessageToAll(handlePieceMessage((PieceMessage) message)); break;                                            //piece
                                 default: break;
                             }
-                            System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
+                            //System.out.println("Receive message: \"" + message.getClass().getName() + "\" from " + neighbor.getPeerID());
                         }
                     }
                 } catch (Exception e) {
@@ -402,7 +404,7 @@ public class peerProcess {
 
         public int handlePieceMessage(PieceMessage pieceMessage){
             fileData[pieceMessage.getIndex()] = pieceMessage.getPayload();
-            System.out.println("================= " + pieceMessage.getIndex() + " =================");
+            //System.out.println("================= " + pieceMessage.getIndex() + " =================");
             ourBitfield[pieceMessage.getIndex()] = true;
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(out, new InterestedMessage());
