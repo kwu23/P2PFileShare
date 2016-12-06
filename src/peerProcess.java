@@ -425,7 +425,9 @@ public class peerProcess {
                 }
 
                 if (missing < 3) {
-                    System.out.println("Missing at index: " + i);
+                    if (ourBitfield[i] == false) {
+                        System.out.println("Missing at index: " + i);
+                    }
                 }
 
             }
