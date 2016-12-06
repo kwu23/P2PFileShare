@@ -56,6 +56,8 @@ public class peerProcess {
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
                     if(handlers.get(optimisticallyUnchokedIndex).unchoke()){
                         startTimeOptimistic = System.nanoTime();
+                        logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the optimistically unchoked neighbor " +
+                                handlers.get(optimisticallyUnchokedIndex).getNeighbor().getPeerID() + " ");
                         return;
                     }
                 }
@@ -96,12 +98,10 @@ public class peerProcess {
                 preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
 
-            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the preferred neighbor ");
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
                 if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
                     preferredNeighbors.add(neighborsToUnchoke.get(x));
-                    logger.info(neighborsToUnchoke.get(x).getNeighbor().getPeerID() + " ");
                 }
             }
             for(int x = 0; x < handlers.size(); x++){
@@ -140,12 +140,10 @@ public class peerProcess {
                 preferredNeighbors.remove((int)indexesToRemove.get(x)).chokePeer();
             }
 
-            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the preferred neighbor ");
             for(int x=0; x<neighborsToUnchoke.size(); x++){
                 neighborsToUnchoke.get(x).unchoke();
                 if(!preferredNeighbors.contains(neighborsToUnchoke.get(x))){
                     preferredNeighbors.add(neighborsToUnchoke.get(x));
-                    logger.info(neighborsToUnchoke.get(x).getNeighbor().getPeerID() + " ");
                 }
             }
             startTimeUnchoking = System.nanoTime();
@@ -398,26 +396,39 @@ public class peerProcess {
 
         public void handleChokeMessage(){
             System.out.println("We're now choked by " + neighbor.getPeerID());
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " is choked by " +
+                    neighbor.getPeerID() + " ");
             isChoked = true;
         }
 
         public RequestMessage handleUnchokeMessage(){
             System.out.println("We're now unchoked from " + neighbor.getPeerID());
             isChoked = false;
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " is unchoked by " +
+                    neighbor.getPeerID() + " ");
+
             return new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield)));
         }
 
         public void handleInterestedMessage(){
             interested = true;
             System.out.println(neighbor.getPeerID() + " is interested");
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " received the ‘interested’ message from " +
+                    neighbor.getPeerID());
         }
 
         public void handleNotInterestedMessage(){
             interested = false;
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " received the ‘not interested’ message from " +
+                    neighbor.getPeerID());
         }
 
         public boolean[] handleHaveMessage(boolean[] bitfield, int index){
             bitfield[index] = true;
+
             if(interestedCheck(and(not(ourBitfield), theirBitfield)) && !areWeInterested) {
                 sendMessage(new InterestedMessage());
                 areWeInterested = true;
@@ -426,6 +437,10 @@ public class peerProcess {
                 sendMessage(new NotInterestedMessage());
                 areWeInterested = false;
             }
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " received the ‘have’ message from " +
+                    neighbor.getPeerID() + " for the piece " + "[" + index + "].");
+
             return bitfield;
         }
         public PieceMessage handleRequestMessage(int index){
@@ -455,12 +470,18 @@ public class peerProcess {
                     Utilities.turnBytesToFile(fileData[i]);
                 }
 
+                logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the complete file.");
+
             }
 
             neighbor.receivedPiece();
             if(areWeInterested && !isChoked){
                 sendMessage(new RequestMessage(findAOne(and(not(ourBitfield), theirBitfield))));
             }
+
+            logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the piece "+
+                    "[" + pieceMessage.getIndex() + "] from " + neighbor.getPeerID());
+
             return pieceMessage.getIndex();
         }
 
@@ -496,6 +517,10 @@ public class peerProcess {
         boolean unchoke(){
             if(peerChoked && interested){
                 sendMessage(new UnchokeMessage());
+                // Change of preferred neighbor is also unchoking
+                logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has the preferred neighbor " +
+                        neighbor.getPeerID() + " ");
+
                 System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
                 return true;
             }
