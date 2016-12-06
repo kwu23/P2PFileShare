@@ -36,11 +36,13 @@ public class peerProcess {
         client.run();
     }
     public static void sendMessageToAll(int msg){
+        System.out.println("BROKE HERE 1");
         for(int x=0; x<handlers.size(); x++){
             handlers.get(x).sendHaveMessage(msg);
         }
     }
     public static void optimisticallyUnchokeSomeone(){
+        System.out.println("BROKE HERE 2");
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
@@ -58,6 +60,7 @@ public class peerProcess {
     }
 
     public static void checkPreferredNeighbors(){
+        System.out.println("BROKE HERE 3");
         if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             int currentNeighbors = 0;
@@ -104,6 +107,7 @@ public class peerProcess {
     }
 
     public static void randomCheckPreferredNeighbors(){
+        System.out.println("BROKE HERE 4");
         if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
@@ -140,6 +144,7 @@ public class peerProcess {
     }
 
     public static void chokePreviousOptimisticallyunchokedPeer(){
+        System.out.println("BROKE HERE 5");
         if(isFirst){
             return;
         }
@@ -229,8 +234,7 @@ public class peerProcess {
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
-                handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF());
-                System.out.println("=======" + handshakeMessage.getMessage() + "=======");
+                handshakeMessage = (HandshakeMessage) in.readObject();
 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
@@ -245,14 +249,15 @@ public class peerProcess {
                     neighbor = new Neighbor(connectedPeerId);
                     amountReceived.add(neighbor);
                 }
-                String handshakeVerification = (String) Serializer.deserialize(in.readUTF());
+
+                String handshakeVerification = (String) in.readObject();
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
                 if(connect){
                     sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
-                    BitfieldMessage bitfieldMessage = (BitfieldMessage) Serializer.deserialize(in.readUTF());
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
                     if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
                         sendMessage(out, new InterestedMessage());
@@ -272,7 +277,7 @@ public class peerProcess {
                              checkPreferredNeighbors();
                          }
                         try{
-                            message = (Message) Serializer.deserialize(in.readUTF());
+                            message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
                             message = null;
                         }
@@ -427,7 +432,7 @@ public class peerProcess {
         void sendMessage(ObjectOutputStream out, Object msg)
         {
             try{
-                out.writeObject(Serializer.serialize(msg));
+                out.writeObject(msg);
                 out.flush();
             }
             catch(IOException ioException){
@@ -448,7 +453,6 @@ public class peerProcess {
             }
             return false;
         }
-
         void chokePeer(){
             sendMessage(out, new ChokeMessage());
             System.out.println("Choke msg sent to " + neighbor.getPeerID());
