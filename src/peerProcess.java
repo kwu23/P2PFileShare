@@ -3,9 +3,8 @@ import Messages.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by kevinwu on 10/19/16.
@@ -20,13 +19,14 @@ public class peerProcess {
     static boolean[] ourBitfield;
     static long unchokeInterval;
     static long optimisticallyUnchokeInterval;
-    static ArrayList<Integer> preferredNeighbors = new ArrayList<>();
+    static ArrayList<Handler> preferredNeighbors = new ArrayList<>();
     static ArrayList<Neighbor> amountReceived = new ArrayList<>();
     static ArrayList<ObjectOutputStream> threads = new ArrayList<>();
     static ArrayList<Handler> handlers = new ArrayList<>();
     static int optimisticallyUnchokedIndex = 0;
     static boolean isFirst = true;
     static long startTimeOptimistic = System.nanoTime();
+    static long startTimeUnchoking = System.nanoTime();
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
@@ -48,7 +48,7 @@ public class peerProcess {
                     chokePreviousOptimisticallyunchokedPeer();
                     isFirst = false;
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
-                    if(handlers.get(optimisticallyUnchokedIndex).optimisticallyUnchoke()){
+                    if(handlers.get(optimisticallyUnchokedIndex).unchoke()){
                         startTimeOptimistic = System.nanoTime();
                         return;
                     }
@@ -57,6 +57,70 @@ public class peerProcess {
             startTimeOptimistic = System.nanoTime();
         }
     }
+
+    public static void checkPreferredNeighbors(){
+        if(System.nanoTime() - startTimeOptimistic >= startTimeUnchoking) {
+            int k = CommonCfg.getNumberOfPreferredNeighbors();
+            int currentNeighbors = 0;
+            ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
+            ArrayList<Integer> numPieces = new ArrayList<>();
+            for (int x = 0; x < handlers.size(); x++) {
+                numPieces.add(handlers.get(x).getNeighbor().getNumOfPieces());
+            }
+            for (int x = 0; x < numPieces.size(); x++) {
+                int max = numPieces.indexOf(Collections.max(numPieces));
+                if (handlers.get(x).isInterestedIn()) {
+                    neighborsToUnchoke.add(handlers.get(x));
+                    currentNeighbors++;
+                }
+                if (currentNeighbors >= k) {
+                    break;
+                }
+            }
+            for (int x = 0; x < preferredNeighbors.size(); x++) {
+                if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
+                    preferredNeighbors.remove(x).chokePeer();
+                } else {
+                    preferredNeighbors.get(x).unchoke();
+                }
+            }
+            for(int x = 0; x < handlers.size(); x++){
+                handlers.get(x).getNeighbor().resetPieces();
+            }
+            startTimeUnchoking = System.nanoTime();
+        }
+    }
+
+    public static void randomCheckPreferredNeighbors(){
+        if(System.nanoTime() - startTimeOptimistic >= startTimeUnchoking) {
+            int k = CommonCfg.getNumberOfPreferredNeighbors();
+            ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
+            if (handlers.size() <= k) {
+                for (int x = 0; x < handlers.size(); x++) {
+                    if (!preferredNeighbors.contains(handlers.get(x))) {
+                        handlers.get(x).unchoke();
+                        preferredNeighbors.add(handlers.get(x));
+                    }
+                }
+            }
+            for (int x = 0; x < k; ) {
+                int randomPeer = (int) (Math.random() * handlers.size());
+                if (handlers.get(randomPeer).isInterestedIn()) {
+                    neighborsToUnchoke.add(handlers.get(x));
+                    x++;
+                }
+            }
+            for (int x = 0; x < preferredNeighbors.size(); x++) {
+                if (!neighborsToUnchoke.contains(preferredNeighbors.get(x))) {
+                    preferredNeighbors.remove(x).chokePeer();
+                } else {
+                    preferredNeighbors.get(x).unchoke();
+                }
+            }
+            startTimeUnchoking = System.nanoTime();
+        }
+    }
+
     public static void chokePreviousOptimisticallyunchokedPeer(){
         if(isFirst){
             return;
@@ -128,6 +192,13 @@ public class peerProcess {
             this.peers = peers;
         }
 
+        public Neighbor getNeighbor(){
+            return neighbor;
+        }
+        public boolean isInterestedIn(){
+            return interested;
+        }
+
         public void run() {
             try {
                 //initialize Input and Output streams
@@ -172,21 +243,16 @@ public class peerProcess {
                     }
                 }
                 try {
-                    long startTimeUnchoke = System.nanoTime();
-                    long startTimeOptimisticallyUnchoke = System.nanoTime();
                     while (connect) {
                         // if (hasFile) random unchoke else if...
                         optimisticallyUnchokeSomeone();
-                        if(System.nanoTime() - startTimeUnchoke >= unchokeInterval){
-                             if (me.hasFile()) {
-                                 //System.out.println("I hab a file");
-                                 randomCheckPrefferedNeighbors();
-                             } else {
-                                 //System.out.println("I don't hab a file");
-                                 checkPreferredNeighbors();
-                             }
-                            startTimeUnchoke = System.nanoTime();
-                        }
+                         if (me.hasFile()) {
+                             //System.out.println("I hab a file");
+                             randomCheckPreferredNeighbors();
+                         } else {
+                             //System.out.println("I don't hab a file");
+                             checkPreferredNeighbors();
+                         }
                         try{
                             message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
@@ -211,7 +277,7 @@ public class peerProcess {
                     e.printStackTrace();
                 }
             } catch (IOException ioException) {
-                System.out.println("Disconnect with Client ");
+                System.out.println("Disconnect with Client");
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
@@ -355,6 +421,21 @@ public class peerProcess {
             sendMessage(out, new HaveMessage(index));
         }
 
+
+        boolean unchoke(){
+            if(peerChoked && interested){
+                sendMessage(out, new UnchokeMessage());
+                System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
+                return true;
+            }
+            return false;
+        }
+        void chokePeer(){
+            sendMessage(out, new ChokeMessage());
+            System.out.println("Choke msg sent to " + neighbor.getPeerID());
+        }
+
+        /*
         void randomCheckPrefferedNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             //System.out.println("k: " + k);
@@ -385,20 +466,6 @@ public class peerProcess {
                 }
             }
         }
-
-        boolean optimisticallyUnchoke(){
-            if(peerChoked && interested){
-                sendMessage(out, new UnchokeMessage());
-                System.out.println("New optimistically unchoke msg sent to " + neighbor.getPeerID());
-                return true;
-            }
-            return false;
-        }
-        void chokePeer(){
-            sendMessage(out, new ChokeMessage());
-            System.out.println("Choke msg sent to " + neighbor.getPeerID());
-        }
-
         void checkPreferredNeighbors() {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             ArrayList<Neighbor> tempNeighbors = new ArrayList<>();
@@ -453,6 +520,7 @@ public class peerProcess {
                 System.out.println("Preferred Neighbors exceeded k: " + k);
             }
         }
+        */
     }
 
 }
