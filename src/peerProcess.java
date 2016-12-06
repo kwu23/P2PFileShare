@@ -305,6 +305,7 @@ public class peerProcess {
             } finally {
                 //Close connections
                 try {
+                    System.out.println("====== HERE ======");
                     in.close();
                     out.close();
                     connection.close();
