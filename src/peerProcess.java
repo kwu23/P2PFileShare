@@ -204,6 +204,7 @@ public class peerProcess {
         private boolean interested = false;
         private boolean areWeInterested = false;
         private Neighbor neighbor;
+        private boolean isFirst = true;
 
         public Handler(Socket connection, List<Peer> peers) {
             this.connection = connection;
@@ -219,50 +220,53 @@ public class peerProcess {
 
         public void run() {
             while(true) {
+                Boolean connect = true;
                 try {
-                    //initialize Input and Output streams
-                    if (out == null) {
-                        out = new ObjectOutputStream(connection.getOutputStream());
-                        out.flush();
-                    }
-                    if (in == null) {
-                        in = new ObjectInputStream(connection.getInputStream());
-                    }
-                    connection.setSoTimeout(5000);
-                    HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
-                    sendMessage(out, handshakeMessage);
-                    System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
-                    Boolean connect = true;
-                    handshakeMessage = (HandshakeMessage) in.readObject();
-
-                    //show the message to the user
-                    System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
-                    if (!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)) {
-                        connect = false;
-                        sendMessage(out, "Disconnecting due to invalid handshake");
-                        System.out.println("Disconnect with Client due to invalid handshake");
-                    }
-                    if (connect) {
-                        sendMessage(out, "Connection successful!");
-                        int connectedPeerId = handshakeMessage.getPeerID();
-                        neighbor = new Neighbor(connectedPeerId);
-                        amountReceived.add(neighbor);
-                    }
-
-                    String handshakeVerification = (String) in.readObject();
-                    System.out.println(handshakeVerification);
-                    if (!handshakeVerification.equals("Connection successful!")) {
-                        connect = false;
-                    }
-                    if (connect) {
-                        sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
-                        BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
-                        theirBitfield = bitfieldMessage.getPayload();
-                        if (interestedCheck(and(not(ourBitfield), theirBitfield))) {
-                            sendMessage(out, new InterestedMessage());
-                            System.out.println("Sending out interested msg to " + neighbor.getPeerID());
-                            areWeInterested = true;
+                    if(isFirst) {
+                        //initialize Input and Output streams
+                        if (out == null) {
+                            out = new ObjectOutputStream(connection.getOutputStream());
+                            out.flush();
                         }
+                        if (in == null) {
+                            in = new ObjectInputStream(connection.getInputStream());
+                        }
+                        connection.setSoTimeout(5000);
+                        HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
+                        sendMessage(out, handshakeMessage);
+                        System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
+                        handshakeMessage = (HandshakeMessage) in.readObject();
+
+                        //show the message to the user
+                        System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
+                        if (!Utilities.isValidHandshake(handshakeMessage.getMessage(), peers)) {
+                            connect = false;
+                            sendMessage(out, "Disconnecting due to invalid handshake");
+                            System.out.println("Disconnect with Client due to invalid handshake");
+                        }
+                        if (connect) {
+                            sendMessage(out, "Connection successful!");
+                            int connectedPeerId = handshakeMessage.getPeerID();
+                            neighbor = new Neighbor(connectedPeerId);
+                            amountReceived.add(neighbor);
+                        }
+
+                        String handshakeVerification = (String) in.readObject();
+                        System.out.println(handshakeVerification);
+                        if (!handshakeVerification.equals("Connection successful!")) {
+                            connect = false;
+                        }
+                        if (connect) {
+                            sendMessage(out, new BitfieldMessage(peerProcess.ourBitfield));
+                            BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
+                            theirBitfield = bitfieldMessage.getPayload();
+                            if (interestedCheck(and(not(ourBitfield), theirBitfield))) {
+                                sendMessage(out, new InterestedMessage());
+                                System.out.println("Sending out interested msg to " + neighbor.getPeerID());
+                                areWeInterested = true;
+                            }
+                        }
+                        isFirst = false;
                     }
                     try {
                         while (connect) {
