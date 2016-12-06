@@ -40,11 +40,12 @@ public class peerProcess {
             handlers.get(x).sendHaveMessage(msg);
         }
     }
+
     public static void optimisticallyUnchokeSomeone(){
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
-                    //chokePreviousOptimisticallyunchokedPeer();
+                    chokePreviousOptimisticallyunchokedPeer();
                     isFirst = false;
                     optimisticallyUnchokedIndex = (int) (Math.random() * handlers.size());
                     if(handlers.get(optimisticallyUnchokedIndex).unchoke()){
@@ -266,7 +267,7 @@ public class peerProcess {
                 try {
                     while (connect) {
                         // if (hasFile) random unchoke else if...
-                        optimisticallyUnchokeSomeone();
+                        //optimisticallyUnchokeSomeone();
                          if (me.hasFile()) {
                              //System.out.println("I hab a file");
                              randomCheckPreferredNeighbors();
