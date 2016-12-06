@@ -276,7 +276,11 @@ public class peerProcess {
                              checkPreferredNeighbors();
                          }
                         try{
-                            message = (Message) in.readObject();
+                            message = null;
+                            synchronized (in) {
+                                message = (Message) in.readObject();
+                            }
+
                         }catch (SocketTimeoutException e){
                             System.out.print("=============" + connection.isConnected() + "=============");
                             message = null;
