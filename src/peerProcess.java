@@ -30,6 +30,8 @@ public class peerProcess {
     static boolean isFirst = true;
     static long startTimeOptimistic = System.nanoTime();
     static long startTimeUnchoking = System.nanoTime();
+    static Date date = new Date();
+    static Logger logger;
 
     public static void main(String[] args) throws IOException {
         commonCfg = new CommonCfg("Common.cfg");
@@ -166,18 +168,19 @@ public class peerProcess {
                         out.close();
                     }
 
-                    Logger logger = Logger.getLogger(peerProcess.class.getName());
+                    logger = Logger.getLogger(peerProcess.class.getName());
                     FileHandler fh = new FileHandler("log_peer_" + peerID + ".log");
                     logger.addHandler(fh);
                     SimpleFormatter formatter = new SimpleFormatter();
                     fh.setFormatter(formatter);
-                    
-                    logger.info("Log established at " + new Date());
+
+                    logger.info("Log established at " + date.getTime());
 
                     break;
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
+                logger.info(date.getTime() + ": Peer " + peerID + " makes a connection to Peer " + peer.getPeerID());
                 Handler handler = new Handler(tempSocket, peers);
                 handlers.add(handler);
                 handler.start();
