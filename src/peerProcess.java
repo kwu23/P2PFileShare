@@ -422,6 +422,7 @@ public class peerProcess {
             if (currentBits() / (double) ourBitfield.length * (double) 100 == 100.0) {
                 for (int i = 0; i < fileData.length; i++) {
                     Utilities.turnBytesToFile(fileData[i]);
+                    System.out.println("We are now writing: " + fileData.length + " arr len: " + fileData[i].length);
                 }
 
             }
