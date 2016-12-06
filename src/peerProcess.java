@@ -209,6 +209,14 @@ public class peerProcess {
             this.connection = connection;
             this.peers = peers;
         }
+        public Handler(SocketAddress ad) {
+            this.connection = new Socket();
+            try{
+                connection.connect(ad);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
 
         public Neighbor getNeighbor(){
             return neighbor;
@@ -306,9 +314,14 @@ public class peerProcess {
                 //Close connections
                 try {
                     System.out.println("====== HERE ======");
+                    SocketAddress ad = connection.getRemoteSocketAddress();
                     in.close();
                     out.close();
                     connection.close();
+                    handlers.remove(handlers.indexOf(this));
+                    Handler temphandler = new Handler(ad);
+                    handlers.add(temphandler);
+                    temphandler.start();
                 } catch (IOException ioException) {
                     System.out.println("Disconnect with Client ");
                 }
