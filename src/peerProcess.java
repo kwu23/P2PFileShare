@@ -210,6 +210,7 @@ public class peerProcess {
         public boolean peerChoked = true;
         private boolean interested = false;
         private boolean areWeInterested = false;
+        private boolean isWritingFile = false;
         private Neighbor neighbor;
 
         public Handler(Socket connection, List<Peer> peers) {
@@ -423,14 +424,14 @@ public class peerProcess {
                 sendMessage(new NotInterestedMessage());
                 areWeInterested = false;
             }
-            System.out.println(currentBits() / (double) ourBitfield.length * (double) 100 + "% done");
 
-            if (currentBits() / (double) ourBitfield.length * (double) 100 == 100.0) {
+            double percentDone = currentBits() / (double) ourBitfield.length * (double) 100;
+            System.out.println(percentDone + "% done");
+
+            if (percentDone == 100.0 && !isWritingFile) {
+                isWritingFile = true;
                 for (int i = 0; i < fileData.length; i++) {
                     Utilities.turnBytesToFile(fileData[i]);
-                    for (int j = 0; j < fileData[i].length; j++) {
-                        System.out.print(fileData[i][j]);
-                    }
                 }
 
             }
