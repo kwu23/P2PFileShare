@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d44fb2e0-ba3a-4a43-8ab7-2d94f697c532" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Messages/PieceMessage.java" afterPath="$PROJECT_DIR$/src/Messages/PieceMessage.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/peerProcess.java" afterPath="$PROJECT_DIR$/src/peerProcess.java" />
     </list>
     <ignored path="P2PFileShare.iws" />
@@ -28,20 +27,20 @@
       <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="428" column="69" selection-start-line="428" selection-start-column="69" selection-end-line="428" selection-end-column="69" />
+            <state relative-caret-position="340">
+              <caret line="232" column="90" selection-start-line="232" selection-start-column="90" selection-end-line="232" selection-end-column="90" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#8905#8906#0" expanded="true" />
                 <element signature="e#8944#8945#0" expanded="true" />
                 <element signature="e#8985#8986#0" expanded="true" />
                 <element signature="e#9026#9027#0" expanded="true" />
-                <element signature="e#16466#16467#0" expanded="true" />
-                <element signature="e#16508#16509#0" expanded="true" />
-                <element signature="e#18927#18928#0" expanded="true" />
-                <element signature="e#18991#18992#0" expanded="true" />
-                <marker date="1481045435000" expanded="false" signature="17139:17153" ph=" { " />
-                <marker date="1481045435000" expanded="false" signature="17201:17211" ph=" }" />
+                <element signature="e#16557#16558#0" expanded="true" />
+                <element signature="e#16599#16600#0" expanded="true" />
+                <element signature="e#19018#19019#0" expanded="true" />
+                <element signature="e#19082#19083#0" expanded="true" />
+                <marker date="1481045518000" expanded="false" signature="17230:17244" ph=" { " />
+                <marker date="1481045518000" expanded="false" signature="17292:17302" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -793,12 +792,12 @@
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
       <workItem from="1479053673291" duration="14573000" />
-      <workItem from="1480704615886" duration="25009000" />
+      <workItem from="1480704615886" duration="25093000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62831000" />
+    <option name="totallyTimeSpent" value="62915000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="953" extended-state="6" />
@@ -1005,12 +1004,12 @@
             <element signature="e#8944#8945#0" expanded="true" />
             <element signature="e#8985#8986#0" expanded="true" />
             <element signature="e#9026#9027#0" expanded="true" />
-            <element signature="e#16466#16467#0" expanded="true" />
-            <element signature="e#16508#16509#0" expanded="true" />
-            <element signature="e#18927#18928#0" expanded="true" />
-            <element signature="e#18991#18992#0" expanded="true" />
-            <marker date="1481045435000" expanded="false" signature="17139:17153" ph=" { " />
-            <marker date="1481045435000" expanded="false" signature="17201:17211" ph=" }" />
+            <element signature="e#16557#16558#0" expanded="true" />
+            <element signature="e#16599#16600#0" expanded="true" />
+            <element signature="e#19018#19019#0" expanded="true" />
+            <element signature="e#19082#19083#0" expanded="true" />
+            <marker date="1481045518000" expanded="false" signature="17230:17244" ph=" { " />
+            <marker date="1481045518000" expanded="false" signature="17292:17302" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1295,20 +1294,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="428" column="69" selection-start-line="428" selection-start-column="69" selection-end-line="428" selection-end-column="69" />
+        <state relative-caret-position="340">
+          <caret line="232" column="90" selection-start-line="232" selection-start-column="90" selection-end-line="232" selection-end-column="90" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#8905#8906#0" expanded="true" />
             <element signature="e#8944#8945#0" expanded="true" />
             <element signature="e#8985#8986#0" expanded="true" />
             <element signature="e#9026#9027#0" expanded="true" />
-            <element signature="e#16466#16467#0" expanded="true" />
-            <element signature="e#16508#16509#0" expanded="true" />
-            <element signature="e#18927#18928#0" expanded="true" />
-            <element signature="e#18991#18992#0" expanded="true" />
-            <marker date="1481045435000" expanded="false" signature="17139:17153" ph=" { " />
-            <marker date="1481045435000" expanded="false" signature="17201:17211" ph=" }" />
+            <element signature="e#16557#16558#0" expanded="true" />
+            <element signature="e#16599#16600#0" expanded="true" />
+            <element signature="e#19018#19019#0" expanded="true" />
+            <element signature="e#19082#19083#0" expanded="true" />
+            <marker date="1481045518000" expanded="false" signature="17230:17244" ph=" { " />
+            <marker date="1481045518000" expanded="false" signature="17292:17302" ph=" }" />
           </folding>
         </state>
       </provider>

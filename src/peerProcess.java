@@ -230,6 +230,7 @@ public class peerProcess {
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
                 handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF().getBytes());
+                System.out.println("=======" + handshakeMessage.getMessage() + "=======");
 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
