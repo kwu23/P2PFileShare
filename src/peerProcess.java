@@ -156,6 +156,12 @@ public class peerProcess {
                     System.out.println("DO I HAVE FILE? " + peer.hasFile());
                     fileData = Utilities.getBytesOfFile(CommonCfg.getFileName(), peer.hasFile());
                     ourBitfield = Utilities.createBitfield(me.hasFile());
+
+                    if (!peer.hasFile()) {
+                        FileOutputStream out = new FileOutputStream(CommonCfg.getFileName());
+                        out.close();
+                    }
+
                     break;
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
