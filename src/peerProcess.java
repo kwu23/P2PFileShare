@@ -228,6 +228,7 @@ public class peerProcess {
                     in = new ObjectInputStream(connection.getInputStream());
                 }
                 connection.setSoTimeout(5000);
+                connection.setKeepAlive(true);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
@@ -277,6 +278,8 @@ public class peerProcess {
                         try{
                             message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
+                            System.out.print("============= ARE WE CONNECTED? " + connection.isConnected() + "=============");
+                            //connection = new Socket();
                             message = null;
                         }
 
