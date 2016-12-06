@@ -228,7 +228,6 @@ public class peerProcess {
                 if(in == null){
                     in = new ObjectInputStream(connection.getInputStream());
                 }
-                connection.setSoTimeout(5000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
@@ -401,6 +400,7 @@ public class peerProcess {
             return bitfield;
         }
         public PieceMessage handleRequestMessage(int index){
+            System.out.println("Index of Piece Msg at handler: " + index);
             return new PieceMessage(fileData[index], index);
         }
 
