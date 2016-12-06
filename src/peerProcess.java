@@ -36,13 +36,11 @@ public class peerProcess {
         client.run();
     }
     public static void sendMessageToAll(int msg){
-        System.out.println("BROKE HERE 1");
         for(int x=0; x<handlers.size(); x++){
             handlers.get(x).sendHaveMessage(msg);
         }
     }
     public static void optimisticallyUnchokeSomeone(){
-        System.out.println("BROKE HERE 2");
         if(System.nanoTime() - startTimeOptimistic >= optimisticallyUnchokeInterval){
             for(int a=0; a<5; a++){
                 for(int x=0; x<handlers.size(); x++){
@@ -60,7 +58,6 @@ public class peerProcess {
     }
 
     public static void checkPreferredNeighbors(){
-        System.out.println("BROKE HERE 3");
         if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             int currentNeighbors = 0;
@@ -107,7 +104,6 @@ public class peerProcess {
     }
 
     public static void randomCheckPreferredNeighbors(){
-        System.out.println("BROKE HERE 4");
         if(System.nanoTime() - startTimeUnchoking >= unchokeInterval) {
             int k = CommonCfg.getNumberOfPreferredNeighbors();
             ArrayList<Handler> neighborsToUnchoke = new ArrayList<>();
@@ -144,7 +140,6 @@ public class peerProcess {
     }
 
     public static void chokePreviousOptimisticallyunchokedPeer(){
-        System.out.println("BROKE HERE 5");
         if(isFirst){
             return;
         }
@@ -229,7 +224,7 @@ public class peerProcess {
                 out = new ObjectOutputStream(connection.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(connection.getInputStream());
-                connection.setSoTimeout(5000);
+                connection.setSoTimeout(10000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(out, handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
