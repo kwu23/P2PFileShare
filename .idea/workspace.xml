@@ -27,20 +27,20 @@
       <file leaf-file-name="peerProcess.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1740">
-              <caret line="279" column="107" selection-start-line="279" selection-start-column="107" selection-end-line="279" selection-end-column="107" />
+            <state relative-caret-position="450">
+              <caret line="157" column="26" selection-start-line="157" selection-start-column="26" selection-end-line="157" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#8905#8906#0" expanded="true" />
-                <element signature="e#8944#8945#0" expanded="true" />
-                <element signature="e#8985#8986#0" expanded="true" />
-                <element signature="e#9026#9027#0" expanded="true" />
-                <element signature="e#16559#16560#0" expanded="true" />
-                <element signature="e#16601#16602#0" expanded="true" />
-                <element signature="e#18987#18988#0" expanded="true" />
-                <element signature="e#19051#19052#0" expanded="true" />
-                <marker date="1481049131000" expanded="false" signature="17232:17246" ph=" { " />
-                <marker date="1481049131000" expanded="false" signature="17294:17304" ph=" }" />
+                <element signature="e#8881#8882#0" expanded="true" />
+                <element signature="e#8920#8921#0" expanded="true" />
+                <element signature="e#8961#8962#0" expanded="true" />
+                <element signature="e#9002#9003#0" expanded="true" />
+                <element signature="e#16535#16536#0" expanded="true" />
+                <element signature="e#16577#16578#0" expanded="true" />
+                <element signature="e#18963#18964#0" expanded="true" />
+                <element signature="e#19027#19028#0" expanded="true" />
+                <marker date="1481049373000" expanded="false" signature="17208:17222" ph=" { " />
+                <marker date="1481049373000" expanded="false" signature="17270:17280" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -132,11 +132,13 @@
       <file leaf-file-name="BitfieldMessage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Messages/BitfieldMessage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="210">
+              <caret line="14" column="30" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="30" />
               <folding>
                 <element signature="e#412#413#0" expanded="true" />
                 <element signature="e#436#437#0" expanded="true" />
+                <element signature="e#540#541#0" expanded="true" />
+                <element signature="e#570#571#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -792,12 +794,12 @@
       <workItem from="1478717713489" duration="4838000" />
       <workItem from="1478792476648" duration="270000" />
       <workItem from="1479053673291" duration="14573000" />
-      <workItem from="1480704615886" duration="28590000" />
+      <workItem from="1480704615886" duration="28823000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66412000" />
+    <option name="totallyTimeSpent" value="66645000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="953" extended-state="6" />
@@ -1000,16 +1002,16 @@
           <caret line="131" column="32" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8905#8906#0" expanded="true" />
-            <element signature="e#8944#8945#0" expanded="true" />
-            <element signature="e#8985#8986#0" expanded="true" />
-            <element signature="e#9026#9027#0" expanded="true" />
-            <element signature="e#16559#16560#0" expanded="true" />
-            <element signature="e#16601#16602#0" expanded="true" />
-            <element signature="e#18987#18988#0" expanded="true" />
-            <element signature="e#19051#19052#0" expanded="true" />
-            <marker date="1481049131000" expanded="false" signature="17232:17246" ph=" { " />
-            <marker date="1481049131000" expanded="false" signature="17294:17304" ph=" }" />
+            <element signature="e#8881#8882#0" expanded="true" />
+            <element signature="e#8920#8921#0" expanded="true" />
+            <element signature="e#8961#8962#0" expanded="true" />
+            <element signature="e#9002#9003#0" expanded="true" />
+            <element signature="e#16535#16536#0" expanded="true" />
+            <element signature="e#16577#16578#0" expanded="true" />
+            <element signature="e#18963#18964#0" expanded="true" />
+            <element signature="e#19027#19028#0" expanded="true" />
+            <marker date="1481049373000" expanded="false" signature="17208:17222" ph=" { " />
+            <marker date="1481049373000" expanded="false" signature="17270:17280" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1177,17 +1179,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Messages/BitfieldMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="e#412#413#0" expanded="true" />
-            <element signature="e#436#437#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Messages/ChokeMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1292,22 +1283,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Messages/BitfieldMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="30" />
+          <folding>
+            <element signature="e#412#413#0" expanded="true" />
+            <element signature="e#436#437#0" expanded="true" />
+            <element signature="e#540#541#0" expanded="true" />
+            <element signature="e#570#571#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/peerProcess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1740">
-          <caret line="279" column="107" selection-start-line="279" selection-start-column="107" selection-end-line="279" selection-end-column="107" />
+        <state relative-caret-position="450">
+          <caret line="157" column="26" selection-start-line="157" selection-start-column="26" selection-end-line="157" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8905#8906#0" expanded="true" />
-            <element signature="e#8944#8945#0" expanded="true" />
-            <element signature="e#8985#8986#0" expanded="true" />
-            <element signature="e#9026#9027#0" expanded="true" />
-            <element signature="e#16559#16560#0" expanded="true" />
-            <element signature="e#16601#16602#0" expanded="true" />
-            <element signature="e#18987#18988#0" expanded="true" />
-            <element signature="e#19051#19052#0" expanded="true" />
-            <marker date="1481049131000" expanded="false" signature="17232:17246" ph=" { " />
-            <marker date="1481049131000" expanded="false" signature="17294:17304" ph=" }" />
+            <element signature="e#8881#8882#0" expanded="true" />
+            <element signature="e#8920#8921#0" expanded="true" />
+            <element signature="e#8961#8962#0" expanded="true" />
+            <element signature="e#9002#9003#0" expanded="true" />
+            <element signature="e#16535#16536#0" expanded="true" />
+            <element signature="e#16577#16578#0" expanded="true" />
+            <element signature="e#18963#18964#0" expanded="true" />
+            <element signature="e#19027#19028#0" expanded="true" />
+            <marker date="1481049373000" expanded="false" signature="17208:17222" ph=" { " />
+            <marker date="1481049373000" expanded="false" signature="17270:17280" ph=" }" />
           </folding>
         </state>
       </provider>

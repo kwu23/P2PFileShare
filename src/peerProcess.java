@@ -153,8 +153,8 @@ public class peerProcess {
                 if(peer.getPeerID() == peerID){
                     me = peer;
                     System.out.println("DO I HAVE FILE? " + peer.hasFile());
-                    peerProcess.fileData = Utilities.getBytesOfFile(CommonCfg.getFileName(), peer.hasFile());
-                    peerProcess.ourBitfield = Utilities.createBitfield(me.hasFile());
+                    fileData = Utilities.getBytesOfFile(CommonCfg.getFileName(), peer.hasFile());
+                    ourBitfield = Utilities.createBitfield(me.hasFile());
                     break;
                 }
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
