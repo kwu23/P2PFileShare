@@ -69,8 +69,9 @@ public class peerProcess {
             }
             for (int x = 0; x < numPieces.size(); x++) {
                 int max = numPieces.indexOf(Collections.max(numPieces));
-                if (handlers.get(x).isInterestedIn()) {
-                    neighborsToUnchoke.add(handlers.get(x));
+                numPieces.remove(max);
+                if (handlers.get(max).isInterestedIn()) {
+                    neighborsToUnchoke.add(handlers.get(max));
                     currentNeighbors++;
                 }
                 if (currentNeighbors >= k) {
