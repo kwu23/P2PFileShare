@@ -304,6 +304,7 @@ public class peerProcess {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
+                System.out.println("==============" + message.getClass().getName() + "==============");
                 //Close connections
                 try {
                     in.close();
@@ -350,7 +351,7 @@ public class peerProcess {
             List<Integer> ones = new ArrayList<>();
             for(int x=0; x<bitfield.length; x++){
                 if(bitfield[x]){
-                    ones.add(x);
+                    return true;
                 }
             }
 
