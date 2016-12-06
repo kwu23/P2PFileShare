@@ -185,10 +185,6 @@ public class peerProcess {
                     break;
                 }
 
-                if (peer.hasFile()) {
-                    peersCompleted[count] = true;
-                }
-
                 count++;
                 Socket tempSocket = new Socket(peer.getHostName(), peer.getListeningPort());
                 System.out.println("Connected to " + peer.getHostName() + "(" + peer.getPeerID() + ")" + " in port " + peer.getListeningPort());
