@@ -315,6 +315,7 @@ public class peerProcess {
                         }catch (SocketTimeoutException e){
                             System.out.println("Waiting on peers...");
                             message = null;
+                            System.exit(0);
                         }
 
                         if(message != null){
@@ -477,7 +478,7 @@ public class peerProcess {
                     Utilities.turnBytesToFile(fileData[i]);
                 }
                 peersCompleted++;
-                //checkOtherPeersCompletion(theirBitfield);
+                checkOtherPeersCompletion(theirBitfield);
 
                 me.setHasFile(true);
                 logger.info("[" + LocalDateTime.now() + "]" + ": Peer " + peerID + " has downloaded the complete file.");
