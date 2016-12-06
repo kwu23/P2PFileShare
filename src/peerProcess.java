@@ -195,8 +195,8 @@ public class peerProcess {
     private static class Handler extends Thread {
         private Message message;    //message received from the client
         private Socket connection;
-        private DataInputStream in;    //stream read from the socket
-        private DataOutputStream out;    //stream write to the socket
+        private ObjectInputStream in;    //stream read from the socket
+        private ObjectOutputStream out;    //stream write to the socket
         private List<Peer> peers;
         private boolean[] theirBitfield;
         private boolean isChoked = true;        //if we are choked
@@ -220,15 +220,19 @@ public class peerProcess {
         public void run() {
             try {
                 //initialize Input and Output streams
-                out = new DataOutputStream(connection.getOutputStream());
-                out.flush();
-                in = new DataInputStream(connection.getInputStream());
+                if(out == null){
+                    out = new ObjectOutputStream(connection.getOutputStream());
+                    out.flush();
+                }
+                if(in == null){
+                    in = new ObjectInputStream(connection.getInputStream());
+                }
                 connection.setSoTimeout(5000);
                 HandshakeMessage handshakeMessage = new HandshakeMessage(peerID);
                 sendMessage(handshakeMessage);
                 System.out.println("Message \"" + handshakeMessage.getMessage() + "\" sent");
                 Boolean connect = true;
-                handshakeMessage = (HandshakeMessage) Serializer.deserialize(in.readUTF());
+                handshakeMessage = (HandshakeMessage) in.readObject();
 
                 //show the message to the user
                 System.out.println("Receive message: \"" + handshakeMessage.getMessage() + "\" from client ");
@@ -244,14 +248,14 @@ public class peerProcess {
                     amountReceived.add(neighbor);
                 }
 
-                String handshakeVerification = (String) Serializer.deserialize(in.readUTF());
+                String handshakeVerification = (String) in.readObject();
                 System.out.println(handshakeVerification);
                 if(!handshakeVerification.equals("Connection successful!")){
                     connect = false;
                 }
                 if(connect){
                     sendMessage(new BitfieldMessage(peerProcess.ourBitfield));
-                    BitfieldMessage bitfieldMessage = (BitfieldMessage) Serializer.deserialize(in.readUTF());
+                    BitfieldMessage bitfieldMessage = (BitfieldMessage) in.readObject();
                     theirBitfield = bitfieldMessage.getPayload();
                     if(interestedCheck(and(not(ourBitfield), theirBitfield))) {
                         sendMessage(new InterestedMessage());
@@ -271,7 +275,7 @@ public class peerProcess {
                              checkPreferredNeighbors();
                          }
                         try{
-                            message = (Message) Serializer.deserialize(in.readUTF());
+                            message = (Message) in.readObject();
                         }catch (SocketTimeoutException e){
                             System.out.print("=============" + connection.isConnected() + "=============");
                             message = null;
@@ -427,7 +431,7 @@ public class peerProcess {
         void sendMessage(Object msg)
         {
             try{
-                out.writeUTF(Serializer.serialize(msg));
+                out.writeObject(msg);
                 out.flush();
             }
             catch(IOException ioException){
